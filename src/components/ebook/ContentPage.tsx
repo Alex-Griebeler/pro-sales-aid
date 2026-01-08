@@ -91,6 +91,24 @@ const ContentPage = ({ section }: ContentPageProps) => {
                     <p className="text-xs italic font-medium text-foreground">"{s.q}"</p>
                   </div>
                 )}
+                {s.alternatives && s.alternatives.length > 0 && (
+                  <div className="space-y-2 pt-2">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent">Alternativas</span>
+                    <ul className="space-y-1.5">
+                      {s.alternatives.map((alt, idx) => (
+                        <li key={idx} className="flex gap-2 items-start text-sm text-foreground">
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-1.5" />
+                          {alt}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {s.followUp && (
+                  <div className="p-3 bg-accent/10 rounded-lg border border-accent/20 mt-2">
+                    <p className="text-xs italic font-medium text-accent">"{s.followUp}"</p>
+                  </div>
+                )}
               </div>
             ))}
           </div>
