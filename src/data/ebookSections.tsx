@@ -15,7 +15,7 @@ export const sections: EbookSection[] = [
     type: 'intro_concept',
     title: "Onde a Conversão Acontece",
     subtitle: "Pré-venda Silenciosa",
-    content: "Esse manual não é só um norte técnico. Ele é um sistema de pré-venda silenciosa, baseado em três coisas:",
+    content: "Esse manual não é só um norte técnico. Ele é um sistema de pré-venda silenciosa, baseado em três fundamentos:",
     list: [
       "Leitura correta do aluno",
       "Condução certa do treino",
