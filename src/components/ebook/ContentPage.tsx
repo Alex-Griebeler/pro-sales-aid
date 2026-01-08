@@ -93,7 +93,7 @@ const ContentPage = ({ section }: ContentPageProps) => {
                 )}
                 {s.alternatives && s.alternatives.length > 0 && (
                   <div className="space-y-2 pt-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent">Alternativas</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent">Opções para o Portfólio</span>
                     <ul className="space-y-1.5">
                       {s.alternatives.map((alt, idx) => (
                         <li key={idx} className="flex gap-2 items-start text-sm text-foreground">
