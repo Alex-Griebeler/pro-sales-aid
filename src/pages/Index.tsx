@@ -5,6 +5,8 @@ import TrianglePage from '@/components/ebook/TrianglePage';
 import AIAssistantPage from '@/components/ebook/AIAssistantPage';
 import ContentPage from '@/components/ebook/ContentPage';
 import IntroConceptPage from '@/components/ebook/IntroConceptPage';
+import TocPage from '@/components/ebook/TocPage';
+import ChecklistPage from '@/components/ebook/ChecklistPage';
 import Navigation from '@/components/ebook/Navigation';
 import ProgressBar from '@/components/ebook/ProgressBar';
 
@@ -13,6 +15,7 @@ const Index = () => {
 
   const next = () => setCurrentPage((prev) => Math.min(prev + 1, sections.length - 1));
   const prev = () => setCurrentPage((prev) => Math.max(prev - 1, 0));
+  const goToPage = (page: number) => setCurrentPage(Math.max(0, Math.min(page, sections.length - 1)));
 
   const active = sections[currentPage];
 
@@ -26,6 +29,10 @@ const Index = () => {
         return <AIAssistantPage section={active} />;
       case 'intro_concept':
         return <IntroConceptPage section={active} />;
+      case 'toc':
+        return <TocPage section={active} onNavigate={goToPage} />;
+      case 'checklist':
+        return <ChecklistPage section={active} />;
       default:
         return <ContentPage section={active} />;
     }

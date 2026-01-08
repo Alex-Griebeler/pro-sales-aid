@@ -22,7 +22,7 @@ const TrianglePage = ({ section }: TrianglePageProps) => {
     <div className="space-y-8 animate-fade-in">
       <header className="space-y-3">
         <h2 className="text-4xl font-bold tracking-tight text-foreground">{section.title}</h2>
-        <p className="text-accent font-semibold text-xl uppercase tracking-tighter">{section.subtitle}</p>
+        <p className="text-accent font-semibold text-lg uppercase tracking-tight">{section.subtitle}</p>
       </header>
 
       {/* Triangle Visualizer */}

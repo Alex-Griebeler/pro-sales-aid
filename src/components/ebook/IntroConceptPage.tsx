@@ -11,7 +11,7 @@ const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
       <header className="space-y-3">
         <h2 className="text-4xl font-bold tracking-tight text-foreground">{section.title}</h2>
         {section.subtitle && (
-          <p className="text-accent font-semibold text-xl uppercase tracking-tight">{section.subtitle}</p>
+          <p className="text-accent font-semibold text-lg uppercase tracking-tight">{section.subtitle}</p>
         )}
       </header>
 

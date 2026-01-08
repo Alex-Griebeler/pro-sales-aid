@@ -1,4 +1,4 @@
-import { UserCheck, Sparkles, MessageSquare, Target } from 'lucide-react';
+import { UserCheck, Sparkles, MessageSquare, Target, Stethoscope } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 
 interface ContentPageProps {
@@ -72,6 +72,31 @@ const ContentPage = ({ section }: ContentPageProps) => {
                 <div key={i} className="flex gap-3 items-center p-3 bg-accent/10 rounded-lg border border-accent/20">
                   <Target className="w-4 h-4 text-accent shrink-0" />
                   <span className="text-sm font-medium text-foreground">{obj}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* PAR-Q Questions */}
+        {section.parqQuestions && (
+          <div className="space-y-4">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">As 7 Perguntas do PAR-Q</span>
+            <div className="grid gap-3">
+              {section.parqQuestions.map((pq, i) => (
+                <div key={i} className="p-4 border border-border rounded-lg space-y-3 bg-card">
+                  <div className="flex gap-3 items-start">
+                    <span className="w-6 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-xs font-bold shrink-0">
+                      {i + 1}
+                    </span>
+                    <p className="text-sm font-medium text-foreground leading-relaxed">{pq.question}</p>
+                  </div>
+                  <div className="ml-9 p-3 bg-surface rounded-lg border-l-2 border-accent">
+                    <div className="flex gap-2 items-start">
+                      <Stethoscope className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                      <p className="text-xs text-muted-foreground leading-relaxed">{pq.guidance}</p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -186,7 +211,7 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Conduct */}
         {section.conduct && (
-          <div className="p-6 border-2 border-primary rounded-lg bg-card shadow-md">
+          <div className="p-6 border-2 border-accent rounded-lg bg-card shadow-md">
             <span className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-accent">
               Condução Técnica Sugerida
             </span>
@@ -194,10 +219,12 @@ const ContentPage = ({ section }: ContentPageProps) => {
           </div>
         )}
 
-        {/* Principle */}
+        {/* Principle - styled differently from quote */}
         {section.principle && (
-          <div className="p-8 bg-surface rounded-lg border border-border text-center italic shadow-inner">
-            <p className="text-lg font-medium tracking-tight text-foreground leading-relaxed">"{section.principle}"</p>
+          <div className="p-6 bg-accent/5 rounded-lg border border-accent/20 text-center">
+            <p className="text-lg font-semibold italic leading-relaxed text-foreground tracking-tight">
+              "{section.principle}"
+            </p>
           </div>
         )}
 
@@ -211,7 +238,7 @@ const ContentPage = ({ section }: ContentPageProps) => {
           </div>
         )}
 
-        {/* Quote */}
+        {/* Quote - neutral style */}
         {section.quote && (
           <div className="p-8 bg-surface rounded-lg border border-border text-center italic shadow-inner">
             <p className="text-lg font-medium tracking-tight text-foreground leading-relaxed">"{section.quote}"</p>
