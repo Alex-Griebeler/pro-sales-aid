@@ -84,11 +84,11 @@ export const sections: EbookSection[] = [
     conduct: "O treino deve mostrar ao aluno o que é, de fato, um alto nível de serviço. Isso começa antes mesmo do primeiro movimento."
   },
   {
-    id: 'p2',
-    title: "P2 — Percepção do Corpo",
-    subtitle: "Ajuste de realidade sutil",
-    question: "De 1 a 5, como você avalia sua condição física hoje? De 1 a 5, o quão satisfeito(a) você está com o seu corpo?",
-    content: "Uso real: Mapear como o aluno se enxerga, não como ele realmente está. O profissional cruza a percepção declarada com o desempenho prático observado.",
+    id: 'p2a',
+    title: "P2.1 — Condição Física",
+    subtitle: "Autopercepção de desempenho",
+    question: "De 1 a 5, como você avalia sua condição física hoje?",
+    content: "Uso real: Mapear como o aluno percebe sua capacidade funcional — força, resistência, mobilidade. Essa percepção será cruzada com o desempenho real durante o treino.",
     scenarios: [
       { 
         t: "Aluno se percebe melhor do que está", 
@@ -98,13 +98,42 @@ export const sections: EbookSection[] = [
       { 
         t: "Aluno se percebe pior do que está", 
         d: "Reforce competência e capacidade. Reposicione a autoconfiança do aluno imediatamente.",
-        q: "Mesmo você tendo se avaliado mais baixo, o que eu vi na prática mostra que você está melhor condicionado do que imagina."
+        q: "Mesmo você tendo se avaliado mais baixo, o que eu vi na prática mostra que você está mais condicionado do que imagina."
       }
     ],
     objectives: [
-      "Balizar a percepção do aluno",
-      "Construir confiança técnica",
-      "Criar clareza sobre o ponto real de partida"
+      "Mapear autopercepção de capacidade física",
+      "Identificar gap entre percepção e realidade",
+      "Preparar ajuste de discurso pós-treino"
+    ]
+  },
+  {
+    id: 'p2b',
+    title: "P2.2 — Satisfação Corporal",
+    subtitle: "Autopercepção estética",
+    question: "De 1 a 5, o quão satisfeito(a) você está com o seu corpo?",
+    content: "Uso real: Mapear como o aluno se sente em relação à própria aparência. Essa resposta indica o peso emocional que a estética tem na motivação — e como calibrar o discurso.",
+    scenarios: [
+      { 
+        t: "Baixa satisfação (1-2)", 
+        d: "Aluno tem alta carga emocional sobre estética. Evite reforçar insatisfação. Foque em processo e conquistas técnicas, não em resultado visual imediato.",
+        q: "O corpo muda como consequência do processo. Meu papel é garantir que esse processo seja sustentável e não frustrante."
+      },
+      { 
+        t: "Satisfação moderada (3)", 
+        d: "Aluno tem expectativas realistas. Aproveite para construir metas claras e progressivas.",
+        q: "Você está num ponto interessante — com ajustes bem direcionados, os resultados vão aparecer de forma consistente."
+      },
+      { 
+        t: "Alta satisfação (4-5)", 
+        d: "Aluno já se sente bem. O foco pode ser performance, saúde ou refinamento. Não force discurso estético.",
+        q: "Como você já está satisfeito com seu corpo, podemos focar em performance, longevidade ou algum objetivo específico que te motive."
+      }
+    ],
+    objectives: [
+      "Entender o peso emocional da estética na motivação",
+      "Calibrar discurso (evitar gatilhos ou promessas vazias)",
+      "Direcionar foco: estética vs. performance vs. saúde"
     ]
   },
   {
