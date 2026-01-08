@@ -54,6 +54,7 @@ export interface EbookSection {
   quote?: string;
   strategy?: string;
   list?: string[];
+  fundamentsTable?: { fundament: string; effect: string }[];
   highlight?: string;
   question?: string;
   questionOptions?: QuestionOption[];

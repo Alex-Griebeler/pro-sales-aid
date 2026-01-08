@@ -18,17 +18,32 @@ const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
       {/* Main content */}
       <p className="text-muted-foreground text-lg leading-relaxed">{section.content}</p>
 
-      {/* Three pillars list */}
-      {section.list && (
-        <div className="space-y-3">
-          {section.list.map((item, i) => (
-            <div key={i} className="flex gap-4 items-center p-4 bg-surface rounded-lg border border-border">
-              <span className="w-8 h-8 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-bold text-sm shrink-0">
-                {i + 1}
-              </span>
-              <span className="font-medium text-foreground">{item}</span>
-            </div>
-          ))}
+      {/* Fundaments table */}
+      {section.fundamentsTable && (
+        <div className="overflow-hidden rounded-xl border border-border">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-accent/10">
+                <th className="text-left p-4 text-xs font-bold uppercase tracking-widest text-accent border-b border-border">Fundamento</th>
+                <th className="text-left p-4 text-xs font-bold uppercase tracking-widest text-accent border-b border-border">Resultado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {section.fundamentsTable.map((row, i) => (
+                <tr key={i} className="border-b border-border last:border-0 hover:bg-surface/50 transition-colors">
+                  <td className="p-4">
+                    <div className="flex gap-3 items-center">
+                      <span className="w-7 h-7 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-bold text-xs shrink-0">
+                        {i + 1}
+                      </span>
+                      <span className="font-medium text-foreground text-sm">{row.fundament}</span>
+                    </div>
+                  </td>
+                  <td className="p-4 text-muted-foreground text-sm italic">{row.effect}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
 
