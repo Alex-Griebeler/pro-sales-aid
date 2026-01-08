@@ -165,7 +165,7 @@ export const sections: EbookSection[] = [
           "Possibilidade de treino em dupla com outro cliente de perfil parecido",
           "Trabalhar com lista de espera consciente"
         ],
-        followUp: "Objetivo: não perder o aluno por falta de opção de serviço ou de horário."
+        followUp: "Objetivo: não perder dinheiro por falta de horário."
       },
       { 
         t: "Horários Ociosos (14h–17h)", 
