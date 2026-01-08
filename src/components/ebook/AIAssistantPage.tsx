@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sparkles, Bot, Loader2 } from 'lucide-react';
+import { Sparkles, Bot, Loader2, Lightbulb } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 
 interface AIAssistantPageProps {
@@ -26,14 +26,41 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
     }, 1500);
   };
 
+  const handleExampleClick = (example: string) => {
+    setAiInput(example);
+  };
+
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in overflow-y-auto max-h-[580px] pr-4 scrollbar-thin">
       <header className="space-y-3">
         <h2 className="text-4xl font-bold tracking-tight flex items-center gap-3 text-foreground">
           {section.title}
         </h2>
         <p className="text-muted-foreground text-lg max-w-3xl leading-relaxed">{section.content}</p>
       </header>
+
+      {/* Example Scenarios */}
+      {section.aiExamples && section.aiExamples.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Lightbulb className="w-4 h-4 text-accent" />
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              Exemplos de cenários
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {section.aiExamples.map((example, i) => (
+              <button
+                key={i}
+                onClick={() => handleExampleClick(example)}
+                className="px-3 py-2 text-xs bg-surface border border-border rounded-lg hover:border-accent/50 hover:bg-accent/5 transition-all text-foreground"
+              >
+                {example}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="bg-surface border border-border rounded-lg p-6 space-y-4 shadow-inner">
         <div className="flex flex-col space-y-2">
@@ -51,7 +78,7 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
         <button 
           onClick={handleAskIA}
           disabled={loading || !aiInput.trim()}
-          className="w-full bg-primary text-primary-foreground py-4 rounded-lg flex items-center justify-center gap-3 hover:bg-accent transition-all disabled:opacity-50 font-semibold"
+          className="w-full bg-primary text-primary-foreground py-4 rounded-lg flex items-center justify-center gap-3 hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-50 font-semibold"
         >
           {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
           Gerar Script ✨

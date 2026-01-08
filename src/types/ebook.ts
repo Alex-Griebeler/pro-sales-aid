@@ -38,9 +38,25 @@ export interface QuestionOption {
   text: string;
 }
 
+export interface ChecklistItem {
+  text: string;
+  category?: string;
+}
+
+export interface TocItem {
+  id: string;
+  title: string;
+  pageNumber: number;
+}
+
+export interface ParqQuestion {
+  question: string;
+  guidance: string;
+}
+
 export interface EbookSection {
   id: string;
-  type?: 'hero' | 'triangle_concept' | 'ai_tool' | 'intro_concept';
+  type?: 'hero' | 'triangle_concept' | 'ai_tool' | 'intro_concept' | 'toc' | 'checklist';
   title: string;
   subtitle?: string;
   tag?: string;
@@ -64,4 +80,8 @@ export interface EbookSection {
   objectives?: string[];
   notList?: string[];
   yesList?: string[];
+  tocItems?: TocItem[];
+  checklistItems?: ChecklistItem[];
+  parqQuestions?: ParqQuestion[];
+  aiExamples?: string[];
 }
