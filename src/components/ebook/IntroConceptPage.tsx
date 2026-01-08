@@ -1,4 +1,4 @@
-import { Sparkles, XCircle, CheckCircle } from 'lucide-react';
+import { Sparkles, XCircle } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 
 interface IntroConceptPageProps {
@@ -67,27 +67,10 @@ const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
           <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
             A conversão NÃO acontece:
           </h4>
-          <div className="grid gap-2">
+          <div className="flex flex-wrap gap-3">
             {section.notList.map((item, i) => (
-              <div key={i} className="flex gap-3 items-center p-3 bg-destructive/10 rounded-lg border border-destructive/20">
-                <XCircle className="w-5 h-5 text-destructive shrink-0" />
-                <span className="font-medium text-sm text-foreground">{item}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Where conversion DOES happen */}
-      {section.yesList && (
-        <div className="space-y-4">
-          <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-            A conversão acontece ANTES do aluno suar, quando:
-          </h4>
-          <div className="grid gap-2">
-            {section.yesList.map((item, i) => (
-              <div key={i} className="flex gap-3 items-center p-3 bg-accent/10 rounded-lg border border-accent/20">
-                <CheckCircle className="w-5 h-5 text-accent shrink-0" />
+              <div key={i} className="flex gap-2 items-center px-4 py-2 bg-destructive/5 rounded-full border border-destructive/20">
+                <XCircle className="w-4 h-4 text-destructive shrink-0" />
                 <span className="font-medium text-sm text-foreground">{item}</span>
               </div>
             ))}
