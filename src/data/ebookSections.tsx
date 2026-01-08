@@ -27,11 +27,6 @@ export const sections: EbookSection[] = [
       "No final do treino",
       "Na proposta"
     ],
-    yesList: [
-      "O aluno se sente compreendido",
-      "O treino entrega o que ele espera sem trair o que ele precisa",
-      "O profissional mostra critério sem confronto"
-    ],
     highlight: "Profissional preparado quase não perde fechamento."
   },
   {
