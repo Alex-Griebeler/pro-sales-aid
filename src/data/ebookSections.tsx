@@ -22,7 +22,7 @@ export const sections: EbookSection[] = [
       { id: 'portfolio', title: 'Portfólio Recomendado', pageNumber: 6 },
       { id: 'p1', title: 'P1 — Perfil de Busca', pageNumber: 7 },
       { id: 'p2a', title: 'P2.1 — Condição Física', pageNumber: 8 },
-      { id: 'p2b', title: 'P2.2 — Satisfação Corporal', pageNumber: 9 },
+      { id: 'p2b', title: 'P2.2 — Autopercepção', pageNumber: 9 },
       { id: 'p3', title: 'P3 — Objetivo e Áreas', pageNumber: 10 },
       { id: 'p4', title: 'P4 — Período do Dia', pageNumber: 11 },
       { id: 'p5', title: 'P5 — Frequência Semanal', pageNumber: 12 },
@@ -179,7 +179,7 @@ export const sections: EbookSection[] = [
   },
   {
     id: 'p2b',
-    title: "P2.2 — Satisfação Corporal",
+    title: "P2.2 — Autopercepção",
     subtitle: "Autopercepção estética",
     question: "De 1 a 5, o quão satisfeito(a) você está com o seu corpo?",
     content: "Uso real: Mapear como o aluno se sente em relação à própria aparência. Essa resposta indica o peso emocional que a estética tem na motivação — e como calibrar o discurso.",
