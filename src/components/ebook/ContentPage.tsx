@@ -196,8 +196,8 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Principle */}
         {section.principle && (
-          <div className="p-6 bg-accent/10 rounded-lg border border-accent/30 text-center">
-            <p className="text-lg font-semibold italic leading-relaxed text-foreground tracking-tight">"{section.principle}"</p>
+          <div className="p-8 bg-surface rounded-lg border border-border text-center italic shadow-inner">
+            <p className="text-lg font-medium tracking-tight text-foreground leading-relaxed">"{section.principle}"</p>
           </div>
         )}
 
