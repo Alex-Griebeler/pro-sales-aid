@@ -18,13 +18,14 @@ const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
       {/* Main content */}
       <p className="text-muted-foreground text-lg leading-relaxed">{section.content}</p>
 
-      {/* Fundaments table */}
+      {/* E.R.A. Fundaments table */}
       {section.fundamentsTable && (
         <div className="overflow-hidden rounded-xl border border-border">
           <table className="w-full">
             <thead>
               <tr className="bg-accent/10">
                 <th className="text-left p-4 text-xs font-bold uppercase tracking-widest text-accent border-b border-border">Fundamento</th>
+                <th className="text-center p-4 text-xs font-bold uppercase tracking-widest text-accent border-b border-border">E.R.A.</th>
                 <th className="text-left p-4 text-xs font-bold uppercase tracking-widest text-accent border-b border-border">Resultado</th>
               </tr>
             </thead>
@@ -38,6 +39,12 @@ const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
                       </span>
                       <span className="font-medium text-foreground text-sm">{row.fundament}</span>
                     </div>
+                  </td>
+                  <td className="p-4 text-center">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30">
+                      <span className="text-accent font-bold text-lg">{row.era.charAt(0)}</span>
+                      <span className="text-muted-foreground text-xs">{row.era.slice(1)}</span>
+                    </span>
                   </td>
                   <td className="p-4 text-muted-foreground text-sm italic">{row.effect}</td>
                 </tr>
