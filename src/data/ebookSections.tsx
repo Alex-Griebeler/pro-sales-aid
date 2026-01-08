@@ -158,7 +158,7 @@ export const sections: EbookSection[] = [
       { 
         t: "Horários de Pico (6h–9h / 18h–21h)", 
         d: "Avaliar disponibilidade real e preparar discurso de escassez com clareza.", 
-        q: "Hoje eu não tenho esse horário disponível, mas a gente pode começar com um modelo híbrido. Assim que abrir vaga, eu te encaixo.",
+        q: "Hoje eu não tenho esse horário disponível, mas a gente pode começar com outras opções de serviços que tenho no meu portfólio e assim que surgir uma vaga, eu te aviso!",
         alternatives: [
           "Oferecer planejamento + sessões quinzenais",
           "Oferecer modelo híbrido temporário",
