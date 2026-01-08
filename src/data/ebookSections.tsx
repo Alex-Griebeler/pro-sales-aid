@@ -165,7 +165,7 @@ export const sections: EbookSection[] = [
           "Possibilidade de treino em dupla com outro cliente de perfil parecido",
           "Trabalhar com lista de espera consciente"
         ],
-        followUp: "Assim que surgir uma vaga, eu te encaixo. O que acha?"
+        followUp: "Objetivo: não perder o aluno por falta de opção de serviço ou de horário."
       },
       { 
         t: "Horários Ociosos (14h–17h)", 
@@ -176,7 +176,7 @@ export const sections: EbookSection[] = [
           "Pacotes com valor ajustado para horários de baixa demanda",
           "Sessões de maior duração pelo mesmo valor"
         ],
-        followUp: "Essa janela me permite oferecer um atendimento com mais flexibilidade."
+        followUp: "Objetivo: compor a grade em horários de menor procura, oferecendo atendimento com mais flexibilidade."
       }
     ],
     quote: "Hoje eu não tenho esse horário disponível, mas a gente pode começar com um modelo híbrido. Assim que abrir vaga, eu te encaixo.",
