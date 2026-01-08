@@ -10,6 +10,8 @@ export interface Scenario {
   t: string;
   d: string;
   q?: string;
+  alternatives?: string[];
+  followUp?: string;
 }
 
 export interface Mapping {

@@ -158,15 +158,27 @@ export const sections: EbookSection[] = [
       { 
         t: "Horários de Pico (6h–9h / 18h–21h)", 
         d: "Avaliar disponibilidade real e preparar discurso de escassez com clareza.", 
-        q: "Esse horário é bem concorrido e, no momento, não tenho disponibilidade." 
+        q: "Esse horário é bem concorrido e, no momento, não tenho disponibilidade.",
+        alternatives: [
+          "Oferecer planejamento + sessões quinzenais",
+          "Oferecer modelo híbrido temporário",
+          "Possibilidade de treino em dupla com outro cliente de perfil parecido",
+          "Trabalhar com lista de espera consciente"
+        ],
+        followUp: "Assim que surgir uma vaga, eu te encaixo. O que acha?"
       },
       { 
         t: "Horários Ociosos (14h–17h)", 
         d: "Oportunidade de facilitar entrada ou valor diferenciado, se fizer sentido para o negócio.", 
-        q: "Tenho uma condição especial para este horário que ajuda a otimizar minha grade." 
+        q: "Tenho uma condição especial para este horário que ajuda a otimizar minha grade.",
+        alternatives: [
+          "Oferecer condição diferenciada de entrada",
+          "Pacotes com valor ajustado para horários de baixa demanda",
+          "Sessões de maior duração pelo mesmo valor"
+        ],
+        followUp: "Essa janela me permite oferecer um atendimento com mais flexibilidade."
       }
     ],
-    strategy: "Estratégias sem vaga: Planejamento + sessões quinzenais, modelo híbrido temporário, treino em dupla com cliente de perfil parecido, ou lista de espera consciente.",
     quote: "Hoje eu não tenho esse horário disponível, mas a gente pode começar com um modelo híbrido. Assim que abrir vaga, eu te encaixo.",
     objectives: [
       "Evitar promessas que não podem ser cumpridas",
