@@ -11,6 +11,30 @@ export const sections: EbookSection[] = [
     content: "Este manual existe para aumentar drasticamente sua taxa de conversão. Não através de persuasão, mas através de preparo, leitura correta e condução segura do treino experimental."
   },
   {
+    id: 'intro-conversao',
+    type: 'intro_concept',
+    title: "Onde a Conversão Acontece",
+    subtitle: "Pré-venda Silenciosa",
+    content: "Esse manual não é só um norte técnico. Ele é um sistema de pré-venda silenciosa, baseado em três coisas:",
+    list: [
+      "Leitura correta do aluno",
+      "Condução certa do treino",
+      "Discurso alinhado com expectativa + necessidade"
+    ],
+    auxiliaryText: "Quando isso acontece junto, a conversão deixa de ser \"técnica de venda\" e vira consequência lógica da experiência.",
+    notList: [
+      "No preço",
+      "No final do treino",
+      "Na proposta"
+    ],
+    yesList: [
+      "O aluno se sente compreendido",
+      "O treino entrega o que ele espera sem trair o que ele precisa",
+      "O profissional mostra critério sem confronto"
+    ],
+    highlight: "Profissional preparado quase não perde fechamento."
+  },
+  {
     id: 'base-conversao',
     type: 'triangle_concept',
     title: "O Triângulo da Conversão",
@@ -49,7 +73,14 @@ export const sections: EbookSection[] = [
     id: 'p1',
     title: "P1 — Perfil de Busca",
     subtitle: "Mapeando o nível de referência",
-    content: "Uso real: Mapear o nível de referência de experiência do aluno. A resposta indica de onde o aluno está partindo.",
+    question: "Qual das opções abaixo mais se aproxima do que você busca hoje com um profissional de treinamento?",
+    questionOptions: [
+      { text: "Nunca treinei com personal e quero orientação básica para começar" },
+      { text: "Já treinei com personal, mas busco algo mais organizado e eficiente" },
+      { text: "Já treinei com personal e procuro um trabalho de alta qualidade e individualizado" },
+      { text: "Estou em dúvida e quero entender melhor como funciona um trabalho bem estruturado" }
+    ],
+    content: "Uso real: Mapear o nível de referência de experiência do aluno. Essa resposta não limita a oferta — ela indica de onde o aluno está partindo.",
     offers: [
       { k: "Orientação básica", v: "Planejamento / Grupos / Time Efficient" },
       { k: "Busca por eficiência", v: "Híbrido / 30 min individual" },
@@ -61,25 +92,32 @@ export const sections: EbookSection[] = [
     id: 'p2',
     title: "P2 — Percepção do Corpo",
     subtitle: "Ajuste de realidade sutil",
-    content: "Uso real: Mapear como o aluno se enxerga. Cruze a percepção com o desempenho motor e capacidade física observados.",
+    question: "De 1 a 5, como você avalia sua condição física hoje? De 1 a 5, o quão satisfeito(a) você está com o seu corpo?",
+    content: "Uso real: Mapear como o aluno se enxerga, não como ele realmente está. O profissional cruza a percepção declarada com o desempenho prático observado.",
     scenarios: [
       { 
         t: "Aluno se percebe melhor do que está", 
-        d: "Reduza o discurso e deixe o treino mostrar limites reais. Ajuste expectativa sem exposição.",
-        q: "Pelo que observei hoje, ainda temos alguns pontos básicos para organizar antes de avançar mais."
+        d: "Reduza o discurso e deixe o treino mostrar limites reais. Ajuste expectativa com base no que foi observado, sem exposição.",
+        q: "Pelo que eu observei no seu agachamento, se melhorarmos a mobilidade de tornozelo você conseguirá aumentar a carga sem sobrecarregar tanto a lombar."
       },
       { 
         t: "Aluno se percebe pior do que está", 
         d: "Reforce competência e capacidade. Reposicione a autoconfiança do aluno imediatamente.",
-        q: "Mesmo você tendo se avaliado mais baixo, o que vi na prática mostra que você está melhor condicionado do que imagina."
+        q: "Mesmo você tendo se avaliado mais baixo, o que eu vi na prática mostra que você está melhor condicionado do que imagina."
       }
+    ],
+    objectives: [
+      "Balizar a percepção do aluno",
+      "Construir confiança técnica",
+      "Criar clareza sobre o ponto real de partida"
     ]
   },
   {
     id: 'p3',
     title: "P3 — Objetivo e Áreas",
     subtitle: "Foco no desejo explícito",
-    content: "Uso real: Identificar o desejo explícito. O treino deve tocar diretamente nesse desejo para gerar direcionamento.",
+    question: "Qual é o seu principal objetivo? Quais áreas do corpo você gostaria de melhorar?",
+    content: "Uso real: Identificar o desejo explícito do aluno. O treino experimental deve tocar diretamente nesse desejo, gerando sensação clara de direcionamento.",
     mapping: [
       { label: "Desejo por Glúteos", val: "Sequência com maior solicitação técnica e volume local." },
       { label: "Desejo por Emagrecimento", val: "Treino dinâmico, integrado e com densidade elevada." }
@@ -90,57 +128,87 @@ export const sections: EbookSection[] = [
     id: 'p4',
     title: "P4 — Período do Dia",
     subtitle: "Logística e viabilidade comercial",
-    content: "Uso real: Logística, agenda e viabilidade comercial. Mapeie horários concorridos vs ociosos.",
+    question: "Qual período do dia você reservou para treinar?",
+    content: "Uso real: Mapear disponibilidade real de horário. Essa pergunta existe para entender se o período é concorrido ou ocioso, e se o profissional tem agenda disponível. Não é sobre experiência — é sobre logística e viabilidade comercial.",
     scenarios: [
       { 
         t: "Horários de Pico (6h–9h / 18h–21h)", 
-        d: "Avaliar disponibilidade e preparar discurso de escassez.", 
-        q: "Esse horário hoje é bem concorrido e, no momento, não tenho vaga fixa." 
+        d: "Avaliar disponibilidade real e preparar discurso de escassez com clareza.", 
+        q: "Esse horário é bem concorrido e, no momento, não tenho disponibilidade." 
       },
       { 
         t: "Horários Ociosos (14h–17h)", 
-        d: "Oportunidade de facilitar entrada ou valor diferenciado.", 
+        d: "Oportunidade de facilitar entrada ou valor diferenciado, se fizer sentido para o negócio.", 
         q: "Tenho uma condição especial para este horário que ajuda a otimizar minha grade." 
       }
     ],
-    strategy: "Estratégia sem vaga: Modelo híbrido temporário, planejamento + sessões quinzenais ou lista de espera consciente.",
-    quote: "Hoje não tenho esse horário disponível, mas podemos começar no híbrido. Assim que abrir vaga, eu te encaixo."
+    strategy: "Estratégias sem vaga: Planejamento + sessões quinzenais, modelo híbrido temporário, treino em dupla com cliente de perfil parecido, ou lista de espera consciente.",
+    quote: "Hoje eu não tenho esse horário disponível, mas a gente pode começar com um modelo híbrido. Assim que abrir vaga, eu te encaixo.",
+    objectives: [
+      "Evitar promessas que não podem ser cumpridas",
+      "Proteger a agenda do profissional",
+      "Não perder o aluno por não ter horário"
+    ]
   },
   {
     id: 'p5',
     title: "P5 — Frequência Semanal",
     subtitle: "Proteção contra o abandono",
-    content: "Uso real: Expectativa vs Histórico. Identifica o risco de insucesso e ambição inicial excessiva.",
-    conduct: "Proteja o aluno de repetir o erro. Se ele relata dificuldade de constância, reduza a meta inicial.",
-    quote: "Para aumentar muito a sua chance de dar certo, sugiro começarmos com o mínimo: duas vezes por semana, bem feitas."
+    question: "Quantas vezes por semana você pretende treinar?",
+    content: "Uso real: Essa pergunta não serve para montar volume ideal de treino. Ela serve para identificar o risco de insucesso. Cruze sempre com histórico recente e resposta da P6.",
+    conduct: "O papel do profissional é proteger o aluno de repetir o mesmo erro. Em vez de validar a meta irreal, reduza a meta inicial, aumente a chance de sucesso e construa disciplina antes de volume.",
+    quote: "Por mais que treinar cinco vezes por semana seja o seu objetivo hoje — e, sendo bem transparente, financeiramente para mim isso também seria interessante — eu acredito que essa não seja a melhor estratégia para você agora. Você mesmo me contou que tem dificuldade de incluir o exercício na rotina. Então, para aumentar muito a sua chance de dar certo, eu sugiro começarmos com o mínimo possível: duas vezes por semana, de 30 a 60 minutos, bem feitas.",
+    principle: "Começar com o mínimo viável (hábitos progressivos): menos barreira de entrada, mais consistência, maior chance de evolução real.",
+    objectives: [
+      "Evitar frustração precoce",
+      "Reduzir abandono",
+      "Aumentar aderência",
+      "Construir disciplina antes de aumentar frequência"
+    ]
   },
   {
     id: 'p6',
     title: "P6 — Maior Dificuldade",
     subtitle: "Ajuste do formato à vida real",
+    question: "Qual é a sua maior dificuldade com o exercício físico?",
+    content: "Uso real: Identificar o principal motivo pelo qual o aluno não consegue manter o exercício na rotina. Essa pergunta é prática — ela aponta onde o processo costuma quebrar.",
     mapping: [
-      { label: "Treinos monótonos", val: "Super-séries, intervalos curtos, alta densidade. Alternativa: 30 min densos." },
-      { label: "Falta de tempo", val: "Mostrar eficiência do estímulo. Alternativa: Modelos Time Efficient." },
-      { label: "Constância", val: "Reduzir meta inicial, volumes baixos. Alternativa: 2 treinos semanais." }
+      { label: "Treinos monótonos", val: "Exercícios combinados (supersets, trisets), intervalos curtos, alta densidade. Alternativa: treinos de 30 min densos." },
+      { label: "Falta de regularidade", val: "O problema não é esforço, é hábito. Reduzir meta inicial, evitar volumes altos. Alternativa: 2 treinos/semana de 30-60 min." },
+      { label: "Falta de tempo", val: "O exercício não cabe na rotina. Mostrar eficiência do estímulo. Alternativa: 2 treinos semanais de 30 min (Time Efficient)." },
+      { label: "Dificuldade em acordar cedo", val: "O horário é o obstáculo. Avaliar horários alternativos. Alternativa: períodos da tarde/noite, horários menos concorridos." }
+    ],
+    objectives: [
+      "Ajustar o formato do serviço à vida real do aluno",
+      "Reduzir abandono",
+      "Aumentar aderência desde o início"
     ]
   },
   {
     id: 'p7',
     title: "P7 — Expectativa do Final",
     subtitle: "Critério de sucesso da sessão",
-    content: "Uso real: Entender o critério de sucesso do aluno (intensidade vs sensação de resultado).",
+    question: "O que você espera atingir ao final do treino experimental?",
+    content: "Uso real: Entender qual é o critério de sucesso do aluno para aquela sessão. Essa pergunta revela o nível de intensidade esperado e como ele vai julgar se o treino foi bom.",
+    conduct: "A intensidade deve ser ajustada cruzando: expectativa declarada + autopercepção (P2) + leitura real do profissional. O erro é entregar a mesma intensidade para todos.",
     types: [
-      { t: "Busca Intensidade", d: "Aumentar volume, reduzir intervalos e gerar dor muscular perceptível (se seguro)." },
-      { t: "Busca Funcionalidade", d: "Priorizar execução, conforto, controle motor e evitar dor muscular residual." },
-      { t: "Busca Hipertrofia", d: "Estímulos fortes, tensão mecânica elevada e fadiga local clara." }
+      { t: "Busca Intensidade (boa condição)", d: "Aluno associa resultado a esforço e dor. Aumentar volume, reduzir intervalos, gerar dor muscular perceptível (se seguro)." },
+      { t: "Busca Funcionalidade (idoso/funcional)", d: "Objetivo é mover-se melhor, com menos dor. Controlar volume, ajustar amplitude, priorizar execução e conforto, evitar dor residual." },
+      { t: "Busca Hipertrofia (treinado)", d: "Intensidade é central. Estímulos fortes, tensão mecânica elevada, fadiga local clara." }
+    ],
+    objectives: [
+      "Ajustar corretamente a intensidade do treino experimental",
+      "Evitar frustração por entrega incompatível",
+      "Aumentar percepção de personalização e competência"
     ]
   },
   {
     id: 'p8',
     title: "P8 — Dor ou Lesão",
     subtitle: "O maior gatilho de conversão",
-    content: "Uso real: Gatilho de conversão e autoridade. Não é só segurança, é demonstração técnica imediata.",
-    conduct: "Realize avaliação biomecânica qualitativa. Corrija o padrão momentaneamente para reduzir desconforto.",
+    question: "Você sente alguma dor ou possui alguma lesão importante que devemos levar em consideração?",
+    content: "Uso real: Identificar oportunidades técnicas de alto valor. Essa pergunta não existe apenas por segurança — ela existe para criar oportunidade de demonstração técnica imediata. Quando bem conduzida, pode ser o maior gatilho de conversão da sessão.",
+    conduct: "Se o aluno responder SIM e você tiver capacidade técnica: realize avaliação biomecânica simples, observe padrões compensatórios, identifique disfunções básicas. O objetivo não é fechar diagnóstico, mas corrigir o padrão momentaneamente, reduzir desconforto e melhorar percepção de movimento.",
     quote: "Isso que você sentia não é algo fixo. É um padrão de movimento que a gente consegue melhorar com o treino certo.",
     list: [
       "Demonstrar competência técnica real",
@@ -149,12 +217,24 @@ export const sections: EbookSection[] = [
     ]
   },
   {
+    id: 'parq',
+    title: "PAR-Q",
+    subtitle: "Questionário de Prontidão",
+    content: "O PAR-Q (Questionário de Prontidão para Atividade Física) deve ser aplicado como instrumento de segurança, separado da condução comercial.",
+    list: [
+      "Identificar riscos à saúde",
+      "Garantir responsabilidade profissional",
+      "Proteger aluno e treinador"
+    ],
+    highlight: "O PAR-Q não é ferramenta de venda. Ele é ferramenta de proteção."
+  },
+  {
     id: 'final',
     title: "A Regra Final",
-    content: "O questionário orienta, o treino gera valor e o fechamento apenas encaixa a oferta correta. O PAR-Q é segurança.",
+    content: "Este documento deve ser usado antes, durante e após o treino experimental.",
     list: [
       "O questionário orienta a condução técnica",
-      "O treino gera percepção de valor real",
+      "O treino experimental gera percepção de valor real",
       "O fechamento encaixa a melhor oferta do portfólio"
     ],
     highlight: "O aluno não compra porque respondeu um formulário. Ele compra porque viveu a experiência certa."

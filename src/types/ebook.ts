@@ -32,9 +32,13 @@ export interface TypeSection {
   d: string;
 }
 
+export interface QuestionOption {
+  text: string;
+}
+
 export interface EbookSection {
   id: string;
-  type?: 'hero' | 'triangle_concept' | 'ai_tool';
+  type?: 'hero' | 'triangle_concept' | 'ai_tool' | 'intro_concept';
   title: string;
   subtitle?: string;
   tag?: string;
@@ -51,4 +55,10 @@ export interface EbookSection {
   strategy?: string;
   list?: string[];
   highlight?: string;
+  question?: string;
+  questionOptions?: QuestionOption[];
+  principle?: string;
+  objectives?: string[];
+  notList?: string[];
+  yesList?: string[];
 }
