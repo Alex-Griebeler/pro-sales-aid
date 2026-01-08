@@ -18,7 +18,7 @@ export const sections: EbookSection[] = [
     content: "Esse manual não é só um norte técnico. Ele é um sistema de pré-venda silenciosa, onde a conversão não acontece por persuasão — acontece por alinhamento. O conceito E.R.A. é a base metodológica:",
     fundamentsTable: [
       { fundament: "Interpretação correta do aluno", era: "Expectativa", effect: "O aluno se sente compreendido" },
-      { fundament: "Condução certa do treino", era: "Realidade", effect: "Entrega o que ele espera sem trair o que ele precisa" },
+      { fundament: "Condução certa do treino", era: "Realidade", effect: "Entrega o que ele espera sem negligenciar o que ele precisa" },
       { fundament: "Discurso alinhado", era: "Autoridade", effect: "Mostra critério sem confronto" },
     ],
     auxiliaryText: "Quando E.R.A. está alinhado, a conversão deixa de ser \"técnica de venda\" e vira consequência lógica da experiência.",
