@@ -13,15 +13,15 @@ export const sections: EbookSection[] = [
   {
     id: 'intro-conversao',
     type: 'intro_concept',
-    title: "Onde a Conversão Acontece",
-    subtitle: "Pré-venda Silenciosa",
-    content: "Esse manual não é só um norte técnico. Ele é um sistema de pré-venda silenciosa, baseado em três fundamentos:",
+    title: "O Conceito E.R.A.",
+    subtitle: "Expectativa · Realidade · Autoridade",
+    content: "Esse manual não é só um norte técnico. Ele é um sistema de pré-venda silenciosa, onde a conversão não acontece por persuasão — acontece por alinhamento. O conceito E.R.A. é a base metodológica:",
     fundamentsTable: [
-      { fundament: "Interpretação correta do aluno", effect: "O aluno se sente compreendido" },
-      { fundament: "Condução certa do treino", effect: "Entrega o que ele espera sem trair o que ele precisa" },
-      { fundament: "Discurso alinhado com expectativa + realidade", effect: "Mostra autoridade sem confronto" },
+      { fundament: "Interpretação correta do aluno", era: "Expectativa", effect: "O aluno se sente compreendido" },
+      { fundament: "Condução certa do treino", era: "Realidade", effect: "Entrega o que ele espera sem trair o que ele precisa" },
+      { fundament: "Discurso alinhado", era: "Autoridade", effect: "Mostra critério sem confronto" },
     ],
-    auxiliaryText: "Quando isso acontece junto, a conversão deixa de ser \"técnica de venda\" e vira consequência lógica da experiência.",
+    auxiliaryText: "Quando E.R.A. está alinhado, a conversão deixa de ser \"técnica de venda\" e vira consequência lógica da experiência.",
     notList: [
       "No preço",
       "No final do treino",
