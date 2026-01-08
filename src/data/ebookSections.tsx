@@ -53,7 +53,7 @@ export const sections: EbookSection[] = [
     offers: [
       { k: "Orientação básica", v: "Planejamento / Grupos / Time Efficient" },
       { k: "Busca por eficiência", v: "Híbrido / 30 min individual" },
-      { k: "Alta qualidade", v: "Premium 60 min ou Premium 30 min" }
+      { k: "Alta qualidade", v: "Premium 60 ou 30 min" }
     ],
     conduct: "O treino deve elevar a referência do aluno, mostrando o nível real de entrega possível."
   },
