@@ -5,16 +5,16 @@ export const sections: EbookSection[] = [
   {
     id: 'capa',
     type: 'hero',
-    title: "Script de Conversão",
+    title: "Script de Conversão Interativo",
     subtitle: "Treino Experimental com Inteligência",
-    tag: "MANUAL TÉCNICO V2.0",
-    content: "Este manual existe para aumentar drasticamente sua taxa de conversão. Não através de persuasão, mas através de preparo, leitura correta e condução segura do treino experimental."
+    tag: "GUIA INTERATIVO V2.0",
+    content: "Este script interativo existe para aumentar drasticamente sua taxa de conversão. Não através de persuasão, mas através de preparo, leitura correta e condução segura do treino experimental."
   },
   {
     id: 'sumario',
     type: 'toc',
     title: "Sumário",
-    subtitle: "Navegue pelo Manual",
+    subtitle: "Navegue pelo Script",
     tocItems: [
       { id: 'intro-conversao', title: 'O Conceito E.R.A.', pageNumber: 3 },
       { id: 'base-conversao', title: 'O Triângulo da Conversão', pageNumber: 4 },
@@ -40,7 +40,7 @@ export const sections: EbookSection[] = [
     type: 'intro_concept',
     title: "O Conceito E.R.A.",
     subtitle: "Expectativa · Realidade · Autoridade",
-    content: "Esse manual não é só um norte técnico. Ele é um sistema de pré-venda silenciosa, onde a conversão não acontece por persuasão — acontece por alinhamento. O conceito E.R.A. é a base metodológica:",
+    content: "Esse script não é só um norte técnico. Ele é um sistema de pré-venda silenciosa, onde a conversão não acontece por persuasão — acontece por alinhamento. O conceito E.R.A. é a base metodológica:",
     fundamentsTable: [
       { fundament: "Interpretação correta do aluno", era: "Expectativa", effect: "O aluno se sente compreendido" },
       { fundament: "Condução certa do treino", era: "Realidade", effect: "Entrega o que ele espera sem negligenciar o que ele precisa" },
@@ -59,7 +59,7 @@ export const sections: EbookSection[] = [
     type: 'triangle_concept',
     title: "O Triângulo da Conversão",
     subtitle: "Conceito E.R.A.",
-    content: "A conversão acontece quando estes três pilares estão alinhados. O manual ensina a equilibrar o que o aluno deseja, o que ele vive e a sua postura profissional.",
+    content: "A conversão acontece quando estes três pilares estão alinhados. O script ensina a equilibrar o que o aluno deseja, o que ele vive e a sua postura profissional.",
     nodes: [
       { id: 'autoridade', label: "AUTORIDADE", icon: <ShieldCheck className="w-6 h-6 text-accent" /> }, 
       { id: 'realidade', label: "REALIDADE", icon: <Activity className="w-6 h-6 text-accent" /> },    
@@ -71,7 +71,7 @@ export const sections: EbookSection[] = [
     id: 'ia_assistant',
     title: "Consultoria IA ✨",
     subtitle: "Estratégia Personalizada",
-    content: "Use a inteligência artificial para adaptar os princípios do manual ao seu caso real de hoje.",
+    content: "Use a inteligência artificial para adaptar os princípios do script ao seu caso real de hoje.",
     type: 'ai_tool',
     aiExamples: [
       "Aluno diz que está caro. O que responder?",
