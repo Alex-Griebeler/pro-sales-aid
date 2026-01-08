@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          access_expires_at: string | null
+          created_at: string
+          email: string
+          full_name: string | null
+          hotmart_product_id: string | null
+          hotmart_transaction_id: string | null
+          id: string
+          purchased_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_expires_at?: string | null
+          created_at?: string
+          email: string
+          full_name?: string | null
+          hotmart_product_id?: string | null
+          hotmart_transaction_id?: string | null
+          id?: string
+          purchased_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_expires_at?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          hotmart_product_id?: string | null
+          hotmart_transaction_id?: string | null
+          id?: string
+          purchased_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
