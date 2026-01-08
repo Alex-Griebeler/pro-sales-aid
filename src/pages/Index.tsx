@@ -4,6 +4,7 @@ import HeroPage from '@/components/ebook/HeroPage';
 import TrianglePage from '@/components/ebook/TrianglePage';
 import AIAssistantPage from '@/components/ebook/AIAssistantPage';
 import ContentPage from '@/components/ebook/ContentPage';
+import IntroConceptPage from '@/components/ebook/IntroConceptPage';
 import Navigation from '@/components/ebook/Navigation';
 import ProgressBar from '@/components/ebook/ProgressBar';
 
@@ -23,6 +24,8 @@ const Index = () => {
         return <TrianglePage section={active} />;
       case 'ai_tool':
         return <AIAssistantPage section={active} />;
+      case 'intro_concept':
+        return <IntroConceptPage section={active} />;
       default:
         return <ContentPage section={active} />;
     }

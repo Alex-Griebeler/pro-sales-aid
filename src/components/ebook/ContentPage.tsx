@@ -1,4 +1,4 @@
-import { UserCheck, Sparkles } from 'lucide-react';
+import { UserCheck, Sparkles, MessageSquare, Target } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 
 interface ContentPageProps {
@@ -13,8 +13,42 @@ const ContentPage = ({ section }: ContentPageProps) => {
         {section.subtitle && (
           <p className="text-accent font-semibold text-lg uppercase tracking-tight">{section.subtitle}</p>
         )}
-        <p className="text-muted-foreground text-lg leading-relaxed">{section.content}</p>
       </header>
+
+      {/* Question */}
+      {section.question && (
+        <div className="p-5 bg-surface rounded-lg border-2 border-accent/30">
+          <div className="flex gap-3 items-start">
+            <MessageSquare className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-accent block">Pergunta ao Aluno</span>
+              <p className="font-medium text-foreground leading-relaxed">{section.question}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Question Options */}
+      {section.questionOptions && (
+        <div className="space-y-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Opções de Resposta</span>
+          <div className="grid gap-2">
+            {section.questionOptions.map((opt, i) => (
+              <div key={i} className="flex gap-3 items-start p-3 bg-card rounded-lg border border-border hover:border-accent/50 transition-colors">
+                <span className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
+                  {String.fromCharCode(65 + i)}
+                </span>
+                <span className="text-sm text-foreground">{opt.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Content */}
+      {section.content && (
+        <p className="text-muted-foreground text-lg leading-relaxed">{section.content}</p>
+      )}
 
       <div className="grid gap-6">
         {/* List Items */}
@@ -27,6 +61,21 @@ const ContentPage = ({ section }: ContentPageProps) => {
               </li>
             ))}
           </ul>
+        )}
+
+        {/* Objectives */}
+        {section.objectives && (
+          <div className="space-y-3">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Objetivo desta pergunta</span>
+            <div className="grid gap-2">
+              {section.objectives.map((obj, i) => (
+                <div key={i} className="flex gap-3 items-center p-3 bg-accent/10 rounded-lg border border-accent/20">
+                  <Target className="w-4 h-4 text-accent shrink-0" />
+                  <span className="text-sm font-medium text-foreground">{obj}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* Scenarios */}
@@ -91,7 +140,7 @@ const ContentPage = ({ section }: ContentPageProps) => {
             {section.types.map((type, i) => (
               <div key={i} className="p-5 bg-card border border-border rounded-lg shadow-sm">
                 <h4 className="font-bold text-foreground mb-2">{type.t}</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed italic">{type.d}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{type.d}</p>
               </div>
             ))}
           </div>
@@ -127,10 +176,30 @@ const ContentPage = ({ section }: ContentPageProps) => {
           </div>
         )}
 
+        {/* Principle */}
+        {section.principle && (
+          <div className="p-5 bg-accent/10 rounded-lg border border-accent/20">
+            <span className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-accent">
+              Princípio Aplicado
+            </span>
+            <p className="text-sm font-medium leading-relaxed text-foreground">{section.principle}</p>
+          </div>
+        )}
+
+        {/* Strategy */}
+        {section.strategy && (
+          <div className="p-5 bg-surface rounded-lg border border-border">
+            <span className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-muted-foreground">
+              Estratégia Alternativa
+            </span>
+            <p className="text-sm font-medium leading-relaxed text-foreground">{section.strategy}</p>
+          </div>
+        )}
+
         {/* Quote */}
         {section.quote && (
           <div className="p-8 bg-surface rounded-lg border border-border text-center italic shadow-inner">
-            <p className="text-xl font-medium tracking-tight text-foreground">"{section.quote}"</p>
+            <p className="text-lg font-medium tracking-tight text-foreground leading-relaxed">"{section.quote}"</p>
           </div>
         )}
 
