@@ -184,7 +184,8 @@ export const sections: EbookSection[] = [
       "Evitar promessas que não podem ser cumpridas",
       "Proteger a agenda do profissional",
       "Não perder o aluno por não ter horário"
-    ]
+    ],
+    principle: "Não atender quem quer comprar não é falta de horário — é falta de estratégia."
   },
   {
     id: 'p5',
