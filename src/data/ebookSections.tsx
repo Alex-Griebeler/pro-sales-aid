@@ -55,7 +55,7 @@ export const sections: EbookSection[] = [
       { k: "Busca por eficiência", v: "Híbrido / 30 min individual" },
       { k: "Alta qualidade", v: "Premium 60 ou 30 min" }
     ],
-    conduct: "O treino deve elevar a referência do aluno, mostrando o nível real de entrega possível."
+    conduct: "O treino deve mostrar ao aluno o que é, de fato, um alto nível de serviço. Isso começa antes mesmo do primeiro movimento."
   },
   {
     id: 'p2',
