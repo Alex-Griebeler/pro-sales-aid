@@ -1,4 +1,4 @@
-import { UserCheck, Sparkles, MessageSquare, Target, Stethoscope } from 'lucide-react';
+import { Check, MessageCircle, Target, Activity, Sparkles } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 
 interface ContentPageProps {
@@ -8,21 +8,23 @@ interface ContentPageProps {
 const ContentPage = ({ section }: ContentPageProps) => {
   return (
     <div className="space-y-8 overflow-y-auto max-h-[580px] pr-4 scrollbar-thin animate-fade-in">
-      <header className="space-y-3">
-        <h2 className="text-4xl font-bold tracking-tight text-foreground">{section.title}</h2>
+      <header className="space-y-2">
+        <h2 className="text-headline text-foreground">{section.title}</h2>
         {section.subtitle && (
-          <p className="text-accent font-semibold text-lg uppercase tracking-tight">{section.subtitle}</p>
+          <p className="text-accent font-medium text-sm uppercase tracking-wider">{section.subtitle}</p>
         )}
       </header>
 
       {/* Question */}
       {section.question && (
-        <div className="p-5 bg-surface rounded-lg border-2 border-accent/30">
-          <div className="flex gap-3 items-start">
-            <MessageSquare className="w-5 h-5 text-accent shrink-0 mt-0.5" />
+        <div className="p-5 bg-accent/5 rounded-2xl border border-accent/10">
+          <div className="flex gap-4 items-start">
+            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <MessageCircle className="w-4 h-4 text-accent" strokeWidth={1.5} />
+            </div>
             <div className="space-y-1">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-accent block">Pergunta ao Aluno</span>
-              <p className="font-medium text-foreground leading-relaxed">{section.question}</p>
+              <span className="text-caption text-accent uppercase tracking-wider">Pergunta ao Aluno</span>
+              <p className="font-medium text-foreground">{section.question}</p>
             </div>
           </div>
         </div>
@@ -30,12 +32,12 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
       {/* Question Options */}
       {section.questionOptions && (
-        <div className="space-y-2">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Opções de Resposta</span>
+        <div className="space-y-3">
+          <span className="text-caption text-muted-foreground uppercase tracking-wider">Opções de Resposta</span>
           <div className="grid gap-2">
             {section.questionOptions.map((opt, i) => (
-              <div key={i} className="flex gap-3 items-start p-3 bg-card rounded-lg border border-border hover:border-accent/50 transition-colors">
-                <span className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
+              <div key={i} className="flex gap-4 items-center p-4 bg-muted/30 rounded-xl hover:bg-muted/50 transition-colors">
+                <span className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-xs font-semibold text-muted-foreground flex-shrink-0">
                   {String.fromCharCode(65 + i)}
                 </span>
                 <span className="text-sm text-foreground">{opt.text}</span>
@@ -47,17 +49,19 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
       {/* Content */}
       {section.content && (
-        <p className="text-muted-foreground text-lg leading-relaxed">{section.content}</p>
+        <p className="text-body text-muted-foreground">{section.content}</p>
       )}
 
       <div className="grid gap-6">
         {/* List Items */}
         {section.list && (
-          <ul className="space-y-3">
+          <ul className="space-y-2">
             {section.list.map((li, i) => (
-              <li key={i} className="flex gap-4 items-start p-4 bg-surface rounded-lg border border-border">
-                <UserCheck className="w-5 h-5 text-accent shrink-0 mt-1" />
-                <span className="font-medium text-sm text-foreground">{li}</span>
+              <li key={i} className="flex gap-4 items-start p-4 bg-muted/30 rounded-xl">
+                <div className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <Check className="w-3 h-3 text-accent" strokeWidth={2} />
+                </div>
+                <span className="text-sm text-foreground">{li}</span>
               </li>
             ))}
           </ul>
@@ -66,12 +70,12 @@ const ContentPage = ({ section }: ContentPageProps) => {
         {/* Objectives */}
         {section.objectives && (
           <div className="space-y-3">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Objetivo desta pergunta</span>
+            <span className="text-caption text-muted-foreground uppercase tracking-wider">Objetivo desta pergunta</span>
             <div className="grid gap-2">
               {section.objectives.map((obj, i) => (
-                <div key={i} className="flex gap-3 items-center p-3 bg-accent/10 rounded-lg border border-accent/20">
-                  <Target className="w-4 h-4 text-accent shrink-0" />
-                  <span className="text-sm font-medium text-foreground">{obj}</span>
+                <div key={i} className="flex gap-3 items-center p-4 bg-accent/5 rounded-xl border border-accent/10">
+                  <Target className="w-4 h-4 text-accent flex-shrink-0" strokeWidth={1.5} />
+                  <span className="text-sm text-foreground">{obj}</span>
                 </div>
               ))}
             </div>
@@ -81,20 +85,20 @@ const ContentPage = ({ section }: ContentPageProps) => {
         {/* PAR-Q Questions */}
         {section.parqQuestions && (
           <div className="space-y-4">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">As 7 Perguntas do PAR-Q</span>
+            <span className="text-caption text-muted-foreground uppercase tracking-wider">As 7 Perguntas do PAR-Q</span>
             <div className="grid gap-3">
               {section.parqQuestions.map((pq, i) => (
-                <div key={i} className="p-4 border border-border rounded-lg space-y-3 bg-card">
+                <div key={i} className="p-4 rounded-xl bg-muted/30 space-y-3">
                   <div className="flex gap-3 items-start">
-                    <span className="w-6 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-xs font-bold shrink-0">
+                    <span className="w-6 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-xs font-semibold flex-shrink-0">
                       {i + 1}
                     </span>
-                    <p className="text-sm font-medium text-foreground leading-relaxed">{pq.question}</p>
+                    <p className="text-sm font-medium text-foreground">{pq.question}</p>
                   </div>
-                  <div className="ml-9 p-3 bg-surface rounded-lg border-l-2 border-accent">
+                  <div className="ml-9 p-3 bg-background rounded-lg border-l-2 border-accent/30">
                     <div className="flex gap-2 items-start">
-                      <Stethoscope className="w-4 h-4 text-accent shrink-0 mt-0.5" />
-                      <p className="text-xs text-muted-foreground leading-relaxed">{pq.guidance}</p>
+                      <Activity className="w-3.5 h-3.5 text-accent flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <p className="text-xs text-muted-foreground">{pq.guidance}</p>
                     </div>
                   </div>
                 </div>
@@ -107,22 +111,22 @@ const ContentPage = ({ section }: ContentPageProps) => {
         {section.scenarios && (
           <div className="grid gap-4">
             {section.scenarios.map((s, i) => (
-              <div key={i} className="p-6 border border-border rounded-lg space-y-4 relative overflow-hidden bg-card shadow-sm">
+              <div key={i} className="p-5 rounded-2xl bg-muted/30 space-y-4 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
-                <h4 className="font-bold text-sm uppercase tracking-widest text-foreground">{s.t}</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
+                <h4 className="font-semibold text-sm text-foreground pl-4">{s.t}</h4>
+                <p className="text-sm text-muted-foreground pl-4">{s.d}</p>
                 {s.q && (
-                  <div className="p-4 bg-surface rounded-lg border-l-2 border-primary">
-                    <p className="text-xs italic font-medium text-foreground">"{s.q}"</p>
+                  <div className="ml-4 p-4 bg-background rounded-xl">
+                    <p className="text-sm italic text-foreground">"{s.q}"</p>
                   </div>
                 )}
                 {s.alternatives && s.alternatives.length > 0 && (
-                  <div className="space-y-2 pt-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-accent">Opções para o Portfólio</span>
+                  <div className="space-y-2 pt-2 pl-4">
+                    <span className="text-caption text-accent uppercase tracking-wider">Opções para o Portfólio</span>
                     <ul className="space-y-1.5">
                       {s.alternatives.map((alt, idx) => (
-                        <li key={idx} className="flex gap-2 items-start text-sm text-foreground">
-                          <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 mt-1.5" />
+                        <li key={idx} className="flex gap-2 items-start text-sm text-foreground/80">
+                          <span className="w-1 h-1 rounded-full bg-accent flex-shrink-0 mt-2" />
                           {alt}
                         </li>
                       ))}
@@ -130,8 +134,8 @@ const ContentPage = ({ section }: ContentPageProps) => {
                   </div>
                 )}
                 {s.followUp && (
-                  <div className="p-3 bg-accent/10 rounded-lg border border-accent/20 mt-2">
-                    <p className="text-xs italic font-medium text-accent">"{s.followUp}"</p>
+                  <div className="ml-4 p-3 bg-accent/5 rounded-xl border border-accent/10">
+                    <p className="text-sm italic text-accent">"{s.followUp}"</p>
                   </div>
                 )}
               </div>
@@ -141,11 +145,11 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Mapping */}
         {section.mapping && (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {section.mapping.map((m, i) => (
-              <div key={i} className="flex flex-col p-4 border border-border rounded-lg bg-surface">
-                <span className="font-bold text-[10px] uppercase tracking-widest text-accent mb-1">{m.label}</span>
-                <span className="font-medium text-sm text-foreground">{m.val}</span>
+              <div key={i} className="flex flex-col p-4 rounded-xl bg-muted/30">
+                <span className="text-caption text-accent uppercase tracking-wider mb-1">{m.label}</span>
+                <span className="text-sm text-foreground">{m.val}</span>
               </div>
             ))}
           </div>
@@ -153,23 +157,23 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Offers Table */}
         {section.offers && (
-          <div className="overflow-hidden border border-border rounded-lg shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-border">
             <table className="w-full text-sm">
-              <thead className="bg-surface">
+              <thead className="bg-muted/50">
                 <tr>
-                  <th className="px-5 py-4 text-left font-bold text-muted-foreground uppercase text-[10px] tracking-widest">
+                  <th className="px-5 py-4 text-left text-caption text-muted-foreground uppercase tracking-wider">
                     Situação do Aluno
                   </th>
-                  <th className="px-5 py-4 text-left font-bold text-muted-foreground uppercase text-[10px] tracking-widest">
+                  <th className="px-5 py-4 text-left text-caption text-muted-foreground uppercase tracking-wider">
                     Encaixe Estratégico
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {section.offers.map((o, i) => (
-                  <tr key={i} className="hover:bg-surface transition-colors">
-                    <td className="px-5 py-5 font-medium text-foreground">{o.k}</td>
-                    <td className="px-5 py-5 text-accent font-bold">{o.v}</td>
+                  <tr key={i} className="hover:bg-muted/30 transition-colors">
+                    <td className="px-5 py-4 text-foreground">{o.k}</td>
+                    <td className="px-5 py-4 text-accent font-medium">{o.v}</td>
                   </tr>
                 ))}
               </tbody>
@@ -179,11 +183,11 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Types */}
         {section.types && (
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {section.types.map((type, i) => (
-              <div key={i} className="p-5 bg-card border border-border rounded-lg shadow-sm">
-                <h4 className="font-bold text-foreground mb-2">{type.t}</h4>
-                <p className="text-sm text-muted-foreground leading-relaxed">{type.d}</p>
+              <div key={i} className="p-5 bg-muted/30 rounded-2xl">
+                <h4 className="font-semibold text-foreground mb-2">{type.t}</h4>
+                <p className="text-sm text-muted-foreground">{type.d}</p>
               </div>
             ))}
           </div>
@@ -193,13 +197,13 @@ const ContentPage = ({ section }: ContentPageProps) => {
         {section.split && (
           <div className="grid md:grid-cols-2 gap-6">
             {section.split.map((s, i) => (
-              <div key={i} className="space-y-4">
-                <h4 className="text-xs font-bold uppercase tracking-widest text-accent border-b-2 border-accent pb-1 inline-block">
+              <div key={i} className="space-y-3">
+                <h4 className="text-caption text-accent uppercase tracking-wider">
                   {s.title}
                 </h4>
                 <div className="space-y-2">
                   {s.items.map((item, idx) => (
-                    <div key={idx} className="p-3 bg-surface rounded-lg text-xs font-medium border border-transparent hover:border-border transition-all text-foreground">
+                    <div key={idx} className="p-3 bg-muted/30 rounded-xl text-sm text-foreground">
                       {item}
                     </div>
                   ))}
@@ -211,18 +215,18 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Conduct */}
         {section.conduct && (
-          <div className="p-6 border-2 border-accent rounded-lg bg-card shadow-md">
-            <span className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-accent">
-              Condução Técnica Sugerida
+          <div className="p-5 rounded-2xl bg-accent/5 border border-accent/10">
+            <span className="text-caption text-accent uppercase tracking-wider mb-2 block">
+              Condução Técnica
             </span>
-            <p className="text-sm font-medium leading-relaxed text-foreground">{section.conduct}</p>
+            <p className="text-sm text-foreground">{section.conduct}</p>
           </div>
         )}
 
-        {/* Principle - styled differently from quote */}
+        {/* Principle */}
         {section.principle && (
-          <div className="p-6 bg-accent/5 rounded-lg border border-accent/20 text-center">
-            <p className="text-lg font-semibold italic leading-relaxed text-foreground tracking-tight">
+          <div className="p-8 bg-accent/5 rounded-2xl border border-accent/10 text-center">
+            <p className="text-lg font-medium italic text-foreground">
               "{section.principle}"
             </p>
           </div>
@@ -230,26 +234,28 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Strategy */}
         {section.strategy && (
-          <div className="p-5 bg-surface rounded-lg border border-border">
-            <span className="text-[10px] font-bold uppercase tracking-widest mb-2 block text-muted-foreground">
+          <div className="p-5 bg-muted/30 rounded-2xl">
+            <span className="text-caption text-muted-foreground uppercase tracking-wider mb-2 block">
               Estratégia Alternativa
             </span>
-            <p className="text-sm font-medium leading-relaxed text-foreground">{section.strategy}</p>
+            <p className="text-sm text-foreground">{section.strategy}</p>
           </div>
         )}
 
-        {/* Quote - neutral style */}
+        {/* Quote */}
         {section.quote && (
-          <div className="p-8 bg-surface rounded-lg border border-border text-center italic shadow-inner">
-            <p className="text-lg font-medium tracking-tight text-foreground leading-relaxed">"{section.quote}"</p>
+          <div className="p-8 bg-muted/30 rounded-2xl text-center">
+            <p className="text-lg font-medium italic text-foreground/80">"{section.quote}"</p>
           </div>
         )}
 
         {/* Highlight */}
         {section.highlight && (
-          <div className="text-center py-12 space-y-6">
-            <Sparkles className="w-14 h-14 text-accent mx-auto animate-pulse-gold" />
-            <h3 className="text-3xl font-bold tracking-tight max-w-xl mx-auto leading-tight text-foreground">
+          <div className="text-center py-10 space-y-5">
+            <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mx-auto">
+              <Sparkles className="w-5 h-5 text-accent" strokeWidth={1.5} />
+            </div>
+            <h3 className="text-title text-foreground max-w-lg mx-auto">
               {section.highlight}
             </h3>
           </div>

@@ -2,84 +2,87 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import premium fonts - SF Pro inspired */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 0 0% 9%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 0 0% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 0 0% 8%;
 
-    --primary: 0 0% 9%;
+    --primary: 0 0% 8%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 98%;
-    --secondary-foreground: 0 0% 9%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 8%;
 
-    --muted: 0 0% 98%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 43 72% 49%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 45 80% 50%;
+    --accent-foreground: 0 0% 8%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 43 72% 49%;
+    --border: 0 0% 92%;
+    --input: 0 0% 92%;
+    --ring: 45 80% 50%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    /* Custom tokens for the e-book */
-    --gold: 43 72% 49%;
-    --gold-hover: 43 72% 42%;
-    --gold-light: 43 72% 95%;
+    /* Premium tokens */
+    --gold: 45 80% 50%;
+    --gold-hover: 45 80% 45%;
+    --gold-light: 45 80% 97%;
     --surface: 0 0% 98%;
     --surface-elevated: 0 0% 100%;
   }
 
   .dark {
-    --background: 0 0% 9%;
+    --background: 0 0% 6%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 12%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 12%;
+    --popover: 0 0% 8%;
     --popover-foreground: 0 0% 98%;
 
     --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
+    --primary-foreground: 0 0% 6%;
 
-    --secondary: 0 0% 15%;
+    --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 98%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 43 72% 49%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 45 80% 50%;
+    --accent-foreground: 0 0% 8%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 43 72% 49%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
+    --ring: 45 80% 50%;
 
-    --gold: 43 72% 49%;
-    --gold-hover: 43 72% 55%;
-    --gold-light: 43 72% 15%;
-    --surface: 0 0% 12%;
-    --surface-elevated: 0 0% 15%;
+    --gold: 45 80% 50%;
+    --gold-hover: 45 80% 58%;
+    --gold-light: 45 80% 12%;
+    --surface: 0 0% 8%;
+    --surface-elevated: 0 0% 10%;
   }
 }
 
@@ -88,21 +91,41 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground;
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
-  /* Custom Scrollbar */
+  body {
+    @apply bg-background text-foreground font-sans;
+    letter-spacing: -0.011em;
+  }
+
+  /* Premium Typography Scale */
+  h1, h2, h3, h4, h5, h6 {
+    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
+
+  /* Ultra-thin scrollbar */
   ::-webkit-scrollbar {
-    width: 5px;
+    width: 4px;
   }
   ::-webkit-scrollbar-track {
-    background: hsl(var(--surface));
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--gold));
-    border-radius: 10px;
+    background: hsl(var(--border));
+    border-radius: 100px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.3);
+  }
+
+  /* Selection */
+  ::selection {
+    background: hsl(var(--gold) / 0.2);
   }
 }
