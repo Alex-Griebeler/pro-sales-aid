@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Sparkles, Bot, Loader2, Lightbulb, Upload, FileText, X, ClipboardPaste } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 import { toast } from 'sonner';
+import AIResponseRenderer from './AIResponseRenderer';
 
 interface AIAssistantPageProps {
   section: EbookSection;
@@ -287,16 +288,14 @@ P8 - Dor/Lesão: Dor lombar ocasional`}
       {error && <p className="text-destructive text-xs text-center">{error}</p>}
 
       {aiResponse && (
-        <div className="p-5 border-l-4 border-accent bg-surface rounded-r-lg animate-fade-in">
-          <div className="flex items-center gap-2 mb-3 text-accent">
+        <div className="space-y-4 animate-fade-in">
+          <div className="flex items-center gap-2 text-gold">
             <Bot className="w-4 h-4" />
-            <span className="font-bold text-xs uppercase tracking-widest text-foreground">
+            <span className="font-bold text-xs uppercase tracking-widest">
               {mode === 'questionnaire' ? 'Script Personalizado' : 'Estratégia Recomendada'}
             </span>
           </div>
-          <div className="text-sm text-foreground leading-relaxed whitespace-pre-wrap prose prose-sm max-w-none">
-            {aiResponse}
-          </div>
+          <AIResponseRenderer response={aiResponse} />
         </div>
       )}
     </div>
