@@ -50,39 +50,39 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 0 0% 6%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 96%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 96%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 96%;
 
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 6%;
+    --primary: 0 0% 96%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 96%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 55%;
 
-    --accent: 45 80% 50%;
-    --accent-foreground: 0 0% 8%;
+    --accent: 45 85% 55%;
+    --accent-foreground: 0 0% 4%;
 
-    --destructive: 0 62% 30%;
+    --destructive: 0 70% 45%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
-    --ring: 45 80% 50%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 45 85% 55%;
 
-    --gold: 45 80% 50%;
-    --gold-hover: 45 80% 58%;
-    --gold-light: 45 80% 12%;
-    --surface: 0 0% 8%;
-    --surface-elevated: 0 0% 10%;
+    --gold: 45 85% 55%;
+    --gold-hover: 45 85% 62%;
+    --gold-light: 45 60% 10%;
+    --surface: 0 0% 6%;
+    --surface-elevated: 0 0% 9%;
   }
 }
 

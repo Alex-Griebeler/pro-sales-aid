@@ -27,38 +27,38 @@ const TrianglePage = ({ section }: TrianglePageProps) => {
 
       {/* Triangle Visualizer */}
       <div className="relative w-full aspect-square max-w-[380px] mx-auto py-6">
-        <svg viewBox="0 0 100 100" className="w-full h-full fill-none stroke-border/50 stroke-[0.3]">
+        <svg viewBox="0 0 100 100" className="w-full h-full fill-none stroke-muted-foreground/30 stroke-[0.5]">
           <path d="M50 18 L82 82 L18 82 Z" />
         </svg>
         
         {/* Top Node (Autoridade) */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 text-center w-40">
-          <div className="bg-foreground text-background w-10 h-10 rounded-full mb-2 inline-flex items-center justify-center">
+          <div className="bg-accent text-accent-foreground w-10 h-10 rounded-full mb-2 inline-flex items-center justify-center shadow-lg shadow-accent/20">
             {section.nodes[0].icon}
           </div>
-          <h4 className="text-caption text-foreground uppercase tracking-wider">{section.nodes[0].label}</h4>
+          <h4 className="text-caption text-foreground uppercase tracking-wider font-medium">{section.nodes[0].label}</h4>
         </div>
 
         {/* Bottom Right (Realidade) */}
         <div className="absolute bottom-4 right-[-10px] text-center w-40">
-          <div className="bg-foreground text-background w-10 h-10 rounded-full mb-2 inline-flex items-center justify-center">
+          <div className="bg-muted text-foreground w-10 h-10 rounded-full mb-2 inline-flex items-center justify-center border border-border">
             {section.nodes[1].icon}
           </div>
-          <h4 className="text-caption text-foreground uppercase tracking-wider">{section.nodes[1].label}</h4>
+          <h4 className="text-caption text-foreground uppercase tracking-wider font-medium">{section.nodes[1].label}</h4>
         </div>
 
         {/* Bottom Left (Expectativa) */}
         <div className="absolute bottom-4 left-[-10px] text-center w-40">
-          <div className="bg-foreground text-background w-10 h-10 rounded-full mb-2 inline-flex items-center justify-center">
+          <div className="bg-muted text-foreground w-10 h-10 rounded-full mb-2 inline-flex items-center justify-center border border-border">
             {section.nodes[2].icon}
           </div>
-          <h4 className="text-caption text-foreground uppercase tracking-wider">{section.nodes[2].label}</h4>
+          <h4 className="text-caption text-foreground uppercase tracking-wider font-medium">{section.nodes[2].label}</h4>
         </div>
       </div>
 
       {section.auxiliaryText && (
-        <div className="p-6 bg-muted/30 rounded-2xl border-l-2 border-accent/50">
-          <p className="text-sm text-foreground/80 leading-relaxed">
+        <div className="p-6 bg-muted/50 rounded-2xl border-l-2 border-accent">
+          <p className="text-sm text-foreground/90 leading-relaxed">
             {highlightWords(section.auxiliaryText)}
           </p>
         </div>
