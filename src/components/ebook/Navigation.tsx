@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface NavigationProps {
   currentPage: number;
@@ -21,8 +22,11 @@ const Navigation = ({ currentPage, totalPages, onPrev, onNext }: NavigationProps
         <span>Anterior</span>
       </button>
       
-      <div className="text-caption text-muted-foreground font-medium tracking-widest uppercase">
-        {String(currentPage + 1).padStart(2, '0')} — {String(totalPages).padStart(2, '0')}
+      <div className="flex items-center gap-4">
+        <div className="text-caption text-muted-foreground font-medium tracking-widest uppercase">
+          {String(currentPage + 1).padStart(2, '0')} — {String(totalPages).padStart(2, '0')}
+        </div>
+        <ThemeToggle />
       </div>
 
       <button 
