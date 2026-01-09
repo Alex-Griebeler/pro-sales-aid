@@ -1,4 +1,4 @@
-import { Sparkles, XCircle } from 'lucide-react';
+import { Sparkles, X } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 
 interface IntroConceptPageProps {
@@ -8,45 +8,45 @@ interface IntroConceptPageProps {
 const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
   return (
     <div className="space-y-8 overflow-y-auto max-h-[580px] pr-4 scrollbar-thin animate-fade-in">
-      <header className="space-y-3">
-        <h2 className="text-4xl font-bold tracking-tight text-foreground">{section.title}</h2>
+      <header className="space-y-2">
+        <h2 className="text-headline text-foreground">{section.title}</h2>
         {section.subtitle && (
-          <p className="text-accent font-semibold text-lg uppercase tracking-tight">{section.subtitle}</p>
+          <p className="text-accent font-medium text-sm uppercase tracking-wider">{section.subtitle}</p>
         )}
       </header>
 
       {/* Main content */}
-      <p className="text-muted-foreground text-lg leading-relaxed">{section.content}</p>
+      <p className="text-body text-muted-foreground">{section.content}</p>
 
       {/* E.R.A. Fundaments table */}
       {section.fundamentsTable && (
-        <div className="overflow-hidden rounded-xl border border-border">
+        <div className="overflow-hidden rounded-2xl border border-border">
           <table className="w-full">
             <thead>
-              <tr className="bg-accent/10">
-                <th className="text-left p-4 text-xs font-bold uppercase tracking-widest text-accent border-b border-border">Fundamento</th>
-                <th className="text-center p-4 text-xs font-bold uppercase tracking-widest text-accent border-b border-border">E.R.A.</th>
-                <th className="text-left p-4 text-xs font-bold uppercase tracking-widest text-accent border-b border-border">Resultado</th>
+              <tr className="bg-muted/50">
+                <th className="text-left p-4 text-caption text-muted-foreground uppercase tracking-wider border-b border-border">Fundamento</th>
+                <th className="text-center p-4 text-caption text-muted-foreground uppercase tracking-wider border-b border-border">E.R.A.</th>
+                <th className="text-left p-4 text-caption text-muted-foreground uppercase tracking-wider border-b border-border">Resultado</th>
               </tr>
             </thead>
             <tbody>
               {section.fundamentsTable.map((row, i) => (
-                <tr key={i} className="border-b border-border last:border-0 hover:bg-surface/50 transition-colors">
+                <tr key={i} className="border-b border-border last:border-0 hover:bg-muted/30 transition-colors">
                   <td className="p-4">
                     <div className="flex gap-3 items-center">
-                      <span className="w-7 h-7 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-bold text-xs shrink-0">
+                      <span className="w-6 h-6 rounded-full bg-accent text-accent-foreground flex items-center justify-center font-semibold text-xs flex-shrink-0">
                         {i + 1}
                       </span>
-                      <span className="font-medium text-foreground text-sm">{row.fundament}</span>
+                      <span className="text-sm text-foreground">{row.fundament}</span>
                     </div>
                   </td>
                   <td className="p-4 text-center">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/20 border border-accent/30">
-                      <span className="text-accent font-bold text-lg">{row.era.charAt(0)}</span>
+                    <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20">
+                      <span className="text-accent font-semibold">{row.era.charAt(0)}</span>
                       <span className="text-muted-foreground text-xs">{row.era.slice(1)}</span>
                     </span>
                   </td>
-                  <td className="p-4 text-muted-foreground text-sm italic">{row.effect}</td>
+                  <td className="p-4 text-muted-foreground text-sm">{row.effect}</td>
                 </tr>
               ))}
             </tbody>
@@ -56,7 +56,7 @@ const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
 
       {/* Auxiliary text */}
       {section.auxiliaryText && (
-        <p className="text-muted-foreground text-lg leading-relaxed italic border-l-4 border-accent pl-4">
+        <p className="text-body text-muted-foreground italic border-l-2 border-accent/50 pl-4">
           {section.auxiliaryText}
         </p>
       )}
@@ -64,14 +64,14 @@ const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
       {/* Where conversion does NOT happen */}
       {section.notList && (
         <div className="space-y-4">
-          <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          <h4 className="text-caption text-muted-foreground uppercase tracking-wider">
             A conversão NÃO acontece:
           </h4>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {section.notList.map((item, i) => (
-              <div key={i} className="flex gap-2 items-center px-4 py-2 bg-destructive/5 rounded-full border border-destructive/20">
-                <XCircle className="w-4 h-4 text-destructive shrink-0" />
-                <span className="font-medium text-sm text-foreground">{item}</span>
+              <div key={i} className="flex gap-2 items-center px-4 py-2 bg-destructive/5 rounded-full border border-destructive/10">
+                <X className="w-3.5 h-3.5 text-destructive" strokeWidth={1.5} />
+                <span className="text-sm text-foreground">{item}</span>
               </div>
             ))}
           </div>
@@ -80,9 +80,11 @@ const IntroConceptPage = ({ section }: IntroConceptPageProps) => {
 
       {/* Highlight */}
       {section.highlight && (
-        <div className="text-center py-8 space-y-4">
-          <Sparkles className="w-10 h-10 text-accent mx-auto animate-pulse-gold" />
-          <h3 className="text-2xl font-bold tracking-tight max-w-xl mx-auto leading-tight text-foreground">
+        <div className="text-center py-10 space-y-5">
+          <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mx-auto">
+            <Sparkles className="w-5 h-5 text-accent" strokeWidth={1.5} />
+          </div>
+          <h3 className="text-title text-foreground max-w-lg mx-auto">
             {section.highlight}
           </h3>
         </div>
