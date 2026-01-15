@@ -6,6 +6,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Validate session ID format (UUID v4)
+const isValidSessionId = (sessionId: string): boolean => {
+  if (!sessionId || typeof sessionId !== 'string') return false;
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(sessionId);
+};
+
+// Validate input text length
+const MAX_INPUT_LENGTH = 50000; // 50KB max
+
 const SYSTEM_PROMPT = `Você é um consultor direto e prático de vendas para Personal Trainers, especialista na metodologia E.R.A.
 
 ## SUA FUNÇÃO
@@ -141,6 +151,14 @@ serve(async (req) => {
   try {
     const { questionnaireData, freeFormInput, type, sessionId, sourceFilename, detectedFormat } = await req.json();
     
+    // Validate session ID
+    if (!isValidSessionId(sessionId)) {
+      return new Response(
+        JSON.stringify({ error: "Sessão inválida. Recarregue a página." }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
@@ -148,6 +166,21 @@ serve(async (req) => {
 
     const inputType = type === "questionnaire" ? "questionnaire" : "scenario";
     const inputText = type === "questionnaire" ? questionnaireData : freeFormInput;
+
+    // Validate input length
+    if (!inputText || typeof inputText !== 'string') {
+      return new Response(
+        JSON.stringify({ error: "Texto de entrada é obrigatório" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (inputText.length > MAX_INPUT_LENGTH) {
+      return new Response(
+        JSON.stringify({ error: `Texto muito longo. Máximo ${MAX_INPUT_LENGTH} caracteres.` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     let userMessage = "";
     
@@ -203,7 +236,7 @@ Baseado na metodologia E.R.A. e nos princípios do Script de Conversão, qual a 
     // Clone response to both stream to client AND collect for DB
     const [streamForClient, streamForDB] = aiResponse.body!.tee();
 
-    // Save to database in background (non-blocking)
+    // Save to database in background (non-blocking) using service role
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 

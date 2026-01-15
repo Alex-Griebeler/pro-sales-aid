@@ -5,6 +5,16 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Max file size: 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+// Validate session ID format (UUID v4)
+const isValidSessionId = (sessionId: string): boolean => {
+  if (!sessionId || typeof sessionId !== 'string') return false;
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(sessionId);
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -14,10 +24,27 @@ serve(async (req) => {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
     const googleFormsUrl = formData.get("googleFormsUrl") as string | null;
+    const sessionId = formData.get("sessionId") as string | null;
+
+    // Validate session ID
+    if (!isValidSessionId(sessionId || '')) {
+      return new Response(
+        JSON.stringify({ error: "Sessão inválida. Recarregue a página." }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     let extractedText = "";
 
     if (file && file.type === "application/pdf") {
+      // Validate file size
+      if (file.size > MAX_FILE_SIZE) {
+        return new Response(
+          JSON.stringify({ error: "Arquivo muito grande. Máximo 5MB." }),
+          { status: 413, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
       // Convert PDF to base64 using chunked approach (avoids stack overflow)
       const arrayBuffer = await file.arrayBuffer();
       const bytes = new Uint8Array(arrayBuffer);

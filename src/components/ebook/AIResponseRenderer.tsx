@@ -1,4 +1,5 @@
 import { Crosshair, AlertCircle, ListTodo, Gift, Ban } from 'lucide-react';
+import DOMPurify from 'dompurify';
 
 interface AIResponseRendererProps {
   response: string;
@@ -9,6 +10,19 @@ interface Section {
   title: string;
   content: string;
 }
+
+// Configure DOMPurify to only allow safe tags
+const ALLOWED_TAGS = ['strong', 'em', 'br'];
+const ALLOWED_ATTR = ['class'];
+
+const sanitize = (html: string): string => {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS,
+    ALLOWED_ATTR,
+    KEEP_CONTENT: true,
+    ALLOW_DATA_ATTR: false,
+  });
+};
 
 const parseResponse = (response: string): Section[] => {
   const sections: Section[] = [];
@@ -52,16 +66,18 @@ const parseResponse = (response: string): Section[] => {
   return sections;
 };
 
+const processMarkdown = (text: string): string => {
+  return text
+    .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+};
+
 const formatContent = (content: string) => {
   return content.split('\n').map((line, idx) => {
-    const processedLine = line
-      .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>')
-      .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    const processedLine = sanitize(processMarkdown(line));
     
     if (line.trim().startsWith('>')) {
-      const quoteText = line.trim().slice(1).trim()
-        .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold">$1</strong>')
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      const quoteText = sanitize(processMarkdown(line.trim().slice(1).trim()));
       return (
         <blockquote 
           key={idx} 
@@ -72,9 +88,7 @@ const formatContent = (content: string) => {
     }
     
     if (line.trim().startsWith('- [ ]')) {
-      const itemText = line.trim().slice(5).trim()
-        .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold">$1</strong>')
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      const itemText = sanitize(processMarkdown(line.trim().slice(5).trim()));
       return (
         <div key={idx} className="flex items-start gap-3 py-1.5">
           <div className="w-4 h-4 mt-0.5 rounded border border-border flex-shrink-0" />
@@ -87,9 +101,7 @@ const formatContent = (content: string) => {
     }
     
     if (line.trim().startsWith('- ')) {
-      const bulletText = line.trim().slice(2)
-        .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold">$1</strong>')
-        .replace(/\*([^*]+)\*/g, '<em>$1</em>');
+      const bulletText = sanitize(processMarkdown(line.trim().slice(2)));
       return (
         <div key={idx} className="flex items-start gap-3 py-1">
           <span className="text-accent/80 mt-1.5 text-[6px]">●</span>
