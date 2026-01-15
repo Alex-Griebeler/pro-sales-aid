@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Sparkles, Cpu, Loader2, Lightbulb, Upload, FileText, X, ClipboardList } from 'lucide-react';
+import { Sparkles, Cpu, Loader2, Lightbulb, Upload, FileText, X, ClipboardList, Link2, FileUp } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 import { toast } from 'sonner';
 import AIResponseRenderer from './AIResponseRenderer';
@@ -9,15 +9,19 @@ interface AIAssistantPageProps {
 }
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-script`;
+const PARSE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/parse-questionnaire`;
 
 const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
   const [aiInput, setAiInput] = useState("");
   const [questionnaireText, setQuestionnaireText] = useState("");
   const [aiResponse, setAiResponse] = useState("");
   const [loading, setLoading] = useState(false);
+  const [parsingPdf, setParsingPdf] = useState(false);
   const [error, setError] = useState("");
   const [mode, setMode] = useState<'scenario' | 'questionnaire'>('scenario');
   const [uploadedFileName, setUploadedFileName] = useState("");
+  const [googleFormsUrl, setGoogleFormsUrl] = useState("");
+  const [showUrlInput, setShowUrlInput] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const parseSSEStream = async (
@@ -121,18 +125,80 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
 
     setUploadedFileName(file.name);
 
-    if (file.type === "text/plain" || file.name.endsWith(".txt")) {
+    // Handle text files directly
+    if (file.type === "text/plain" || file.name.endsWith(".txt") || file.name.endsWith(".csv") || file.name.endsWith(".md")) {
       const text = await file.text();
       setQuestionnaireText(text);
       toast.success("Arquivo carregado!");
-    } else if (file.type === "application/pdf") {
-      toast.info("PDF detectado. Por favor, copie o texto do questionário e cole no campo abaixo.");
-      setQuestionnaireText("");
-    } else {
-      const text = await file.text();
-      setQuestionnaireText(text);
-      toast.success("Arquivo carregado!");
+      return;
     }
+
+    // Handle PDF files
+    if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
+      setParsingPdf(true);
+      toast.info("Processando PDF com IA...");
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await fetch(PARSE_URL, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: formData,
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Erro ao processar PDF");
+        }
+
+        if (data.text) {
+          setQuestionnaireText(data.text);
+          toast.success("PDF processado com sucesso!");
+        } else {
+          throw new Error("Nenhum texto extraído do PDF");
+        }
+      } catch (e) {
+        console.error("PDF parsing error:", e);
+        toast.error(e instanceof Error ? e.message : "Erro ao processar PDF. Copie o texto manualmente.");
+        setQuestionnaireText("");
+      } finally {
+        setParsingPdf(false);
+      }
+      return;
+    }
+
+    // Try to read as text for other file types
+    try {
+      const text = await file.text();
+      setQuestionnaireText(text);
+      toast.success("Arquivo carregado!");
+    } catch {
+      toast.error("Não foi possível ler este arquivo");
+    }
+  };
+
+  const handleGoogleFormsUrl = () => {
+    if (!googleFormsUrl.trim()) {
+      toast.error("Cole o link do Google Forms");
+      return;
+    }
+
+    // Validate Google Forms URL
+    if (!googleFormsUrl.includes("docs.google.com/forms") && !googleFormsUrl.includes("forms.gle")) {
+      toast.error("URL inválida. Use um link do Google Forms.");
+      return;
+    }
+
+    toast.info(
+      "Para questionários do Google Forms, exporte as respostas como CSV ou copie o texto diretamente. Vá em 'Respostas' > 'Criar planilha' e exporte como CSV.",
+      { duration: 8000 }
+    );
+    setShowUrlInput(false);
   };
 
   const handleExampleClick = (example: string) => {
@@ -143,6 +209,7 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
   const clearQuestionnaire = () => {
     setQuestionnaireText("");
     setUploadedFileName("");
+    setGoogleFormsUrl("");
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
@@ -237,23 +304,56 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
               )}
             </div>
 
-            <div className="flex gap-2">
+            {/* Upload Options */}
+            <div className="flex flex-wrap gap-2">
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".txt,.md,.csv"
+                accept=".txt,.md,.csv,.pdf,application/pdf"
                 onChange={handleFileUpload}
                 className="hidden"
                 id="questionnaire-upload"
+                disabled={parsingPdf}
               />
               <label
                 htmlFor="questionnaire-upload"
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-muted/50 rounded-full cursor-pointer hover:bg-muted transition-all text-muted-foreground hover:text-foreground"
+                className={`flex items-center gap-2 px-4 py-2 text-sm bg-muted/50 rounded-full cursor-pointer hover:bg-muted transition-all text-muted-foreground hover:text-foreground ${parsingPdf ? 'opacity-50 cursor-wait' : ''}`}
               >
-                <Upload className="w-3.5 h-3.5" strokeWidth={1.5} />
-                Upload .txt
+                {parsingPdf ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
+                ) : (
+                  <FileUp className="w-3.5 h-3.5" strokeWidth={1.5} />
+                )}
+                {parsingPdf ? 'Processando...' : 'Upload PDF / TXT'}
               </label>
+
+              <button
+                onClick={() => setShowUrlInput(!showUrlInput)}
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-muted/50 rounded-full hover:bg-muted transition-all text-muted-foreground hover:text-foreground"
+              >
+                <Link2 className="w-3.5 h-3.5" strokeWidth={1.5} />
+                Google Forms
+              </button>
             </div>
+
+            {/* Google Forms URL Input */}
+            {showUrlInput && (
+              <div className="flex gap-2 animate-fade-in">
+                <input
+                  type="url"
+                  value={googleFormsUrl}
+                  onChange={(e) => setGoogleFormsUrl(e.target.value)}
+                  placeholder="Cole o link do Google Forms..."
+                  className="flex-1 bg-muted/30 border-0 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all text-foreground placeholder:text-muted-foreground"
+                />
+                <button
+                  onClick={handleGoogleFormsUrl}
+                  className="px-4 py-2 text-sm bg-accent text-accent-foreground rounded-full hover:bg-accent/80 transition-all font-medium"
+                >
+                  Importar
+                </button>
+              </div>
+            )}
 
             <textarea
               value={questionnaireText}
@@ -270,12 +370,13 @@ P6 - Dificuldade: Falta de regularidade
 P7 - Expectativa: Ter um corpo definido em 6 meses
 P8 - Dor/Lesão: Dor lombar ocasional`}
               className="w-full bg-muted/30 border-0 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 h-44 resize-none transition-all text-foreground placeholder:text-muted-foreground"
+              disabled={parsingPdf}
             />
           </div>
 
           <button
             onClick={handleGenerate}
-            disabled={loading || !questionnaireText.trim()}
+            disabled={loading || !questionnaireText.trim() || parsingPdf}
             className="w-full bg-accent text-accent-foreground py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-foreground hover:text-background transition-all disabled:opacity-40 font-medium text-sm"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" strokeWidth={1.5} /> : <FileText className="w-4 h-4" strokeWidth={1.5} />}
