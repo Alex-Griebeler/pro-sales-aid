@@ -17,12 +17,32 @@ Analisar o cenário/questionário e entregar um PLANO DE AÇÃO EXECUTÁVEL para
 4. **Conversão é consequência** - Foque na experiência, não na venda
 
 ## INTERPRETAÇÃO DE QUESTIONÁRIO (quando aplicável)
-Ao receber respostas do questionário P1-P8, interprete:
+Ao receber respostas de questionário (P1-P8, FABRIK ou outros formatos), interprete:
+
+**DADOS BÁSICOS:**
 - **Frequência/tempo disponível** → Define intensidade e formato do plano
 - **Objetivo declarado** → Ancora todo o discurso e a experiência
 - **Experiência prévia** → Calibra nível técnico e vocabulário
 - **Limitações físicas/saúde** → Define cuidados e demonstra autoridade
 - **Expectativas de resultado** → Identifica gaps de realidade a alinhar
+
+**DADOS DEMOGRÁFICOS (se disponíveis):**
+- **Idade** → Ajusta linguagem, ritmo e exemplos (60+ anos = mais pausado, referências de saúde)
+- **Profissão** → Indica perfil decisório (engenheiro = analítico, valoriza dados; autônomo = flexibilidade)
+
+**CONTEXTO COMERCIAL (se disponível):**
+- **Como conheceu** → Canal de aquisição influencia expectativas (indicação = já confia; Instagram = precisa validar)
+- **Prioridade qualidade vs preço** → ANTECIPA OBJEÇÃO DE VALOR (se marcou "preço", prepare resposta)
+- **Proximidade/localização** → Pode ser barreira logística a endereçar
+
+**SAÚDE DETALHADA / PAR-Q (se disponível):**
+- **PAR-Q positivo em qualquer item** → OPORTUNIDADE DE AUTORIDADE: demonstre conhecimento técnico
+- **Múltiplas condições** → Reforce segurança e acompanhamento individualizado
+- **Lesões/cirurgias** → Mencione adaptações específicas durante o experimental
+
+**EXPECTATIVAS TEMPORAIS (se disponível):**
+- **Prazo curto (3 meses)** → Pode indicar expectativa irreal - alinhe com realidade gentilmente
+- **Prazo longo (12+ meses)** → Cliente mais paciente, foque em processo não resultado imediato
 
 ## ESTRUTURA DE RESPOSTA (seja DIRETO)
 

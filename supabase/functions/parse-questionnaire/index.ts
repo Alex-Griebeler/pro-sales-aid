@@ -45,20 +45,47 @@ serve(async (req) => {
               content: [
                 {
                   type: "text",
-                  text: `Extraia todas as perguntas e respostas deste questionário PDF. 
-Formate a saída de forma clara, identificando cada pergunta (P1, P2.1, P2.2, P3, P4, P5, P6, P7, P8) e sua respectiva resposta.
-Se não encontrar as perguntas numeradas, identifique o conteúdo relevante sobre:
-- Perfil de busca
-- Condição física
-- Autopercepção/satisfação corporal
-- Objetivo
-- Período do dia
-- Frequência semanal
-- Maior dificuldade
-- Expectativa de resultado
-- Dor ou lesão
+                  text: `Analise este questionário de avaliação para Personal Trainer e extraia TODAS as informações disponíveis.
 
-Retorne APENAS o texto extraído formatado, sem explicações adicionais.`
+PRIMEIRO: Identifique o TIPO de questionário (P1-P8 padrão, FABRIK, ou outro formato).
+
+DEPOIS: Extraia as informações organizadas nas seguintes CATEGORIAS (omita categorias que não existirem no documento):
+
+## IDENTIFICAÇÃO
+Nome, idade, profissão, contato, gênero
+
+## CONTEXTO COMERCIAL
+Como conheceu o personal, proximidade/localização, prioridade entre qualidade e preço
+
+## EXPERIÊNCIA PRÉVIA
+Já treinou com personal antes, onde treina atualmente, frequência anterior, tempo que pratica exercícios
+
+## AUTOAVALIAÇÃO
+Notas de condição física (escala 1-5), satisfação corporal (escala 1-5), como se sente em relação ao corpo
+
+## OBJETIVOS
+Objetivo principal, partes do corpo em foco, resultado específico esperado, motivação
+
+## LOGÍSTICA
+Período preferido para treino, frequência semanal desejada, disponibilidade de dias, local preferido
+
+## DIFICULDADES
+Maior obstáculo para se exercitar, dificuldades anteriores, o que fez desistir antes
+
+## SAÚDE / PAR-Q
+TODAS as respostas sobre saúde: problemas cardíacos, pressão arterial, dores, tonturas, medicamentos, condições que limitam atividade física, lesões, cirurgias, alergias, restrições médicas
+
+## EXPECTATIVAS
+Prazo esperado para resultados (3 meses, 6 meses, etc.), o que espera alcançar, expectativas sobre o serviço
+
+REGRAS IMPORTANTES:
+- Se uma resposta não estiver clara ou não foi marcada no formulário, indique: [NÃO IDENTIFICADO]
+- Se for uma escala (1-5) e a marcação não estiver visível, indique: [ESCALA NÃO VISÍVEL]
+- NÃO invente dados que não existem no documento
+- Extraia números, datas e valores exatamente como aparecem
+- Mantenha o formato organizado por categorias
+
+Retorne APENAS a extração formatada, sem explicações adicionais.`
                 },
                 {
                   type: "image_url",
