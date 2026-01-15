@@ -11,6 +11,7 @@ interface AIAssistantPageProps {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-script`;
 const PARSE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/parse-questionnaire`;
+const GET_CONSULTATION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-consultation`;
 
 // Get or create a persistent session ID
 const getSessionId = (): string => {
@@ -139,7 +140,7 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
         },
         () => {
           setLoading(false);
-          // After stream completes, fetch the consultation ID
+          // After stream completes, fetch the consultation ID via Edge Function
           fetchLatestConsultationId();
         }
       );
@@ -156,18 +157,20 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
       // Small delay to ensure DB save completes
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const { supabase } = await import('@/integrations/supabase/client');
-      
-      const { data, error } = await supabase
-        .from('ai_consultations')
-        .select('id')
-        .eq('session_id', sessionId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
+      const response = await fetch(GET_CONSULTATION_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ sessionId }),
+      });
 
-      if (!error && data) {
-        setConsultationId(data.id);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.consultation_id) {
+          setConsultationId(data.consultation_id);
+        }
       }
     } catch (e) {
       console.error('Error fetching consultation ID:', e);
@@ -190,12 +193,20 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
 
     // Handle PDF files
     if (file.type === "application/pdf" || file.name.endsWith(".pdf")) {
+      // Check file size client-side
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      if (file.size > MAX_FILE_SIZE) {
+        toast.error("Arquivo muito grande. Máximo 5MB.");
+        return;
+      }
+
       setParsingPdf(true);
       toast.info("Processando PDF com IA...");
 
       try {
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("sessionId", sessionId);
 
         const response = await fetch(PARSE_URL, {
           method: "POST",
@@ -330,6 +341,7 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
               onChange={(e) => setAiInput(e.target.value)}
               placeholder="Ex: Aluno de 45 anos com dor no ombro diz que está caro. O que dizer?"
               className="w-full bg-muted/30 border-0 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 h-28 resize-none transition-all text-foreground placeholder:text-muted-foreground"
+              maxLength={50000}
             />
             <button
               onClick={handleGenerate}
@@ -426,6 +438,7 @@ P7 - Expectativa: Ter um corpo definido em 6 meses
 P8 - Dor/Lesão: Dor lombar ocasional`}
               className="w-full bg-muted/30 border-0 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 h-44 resize-none transition-all text-foreground placeholder:text-muted-foreground"
               disabled={parsingPdf}
+              maxLength={50000}
             />
           </div>
 

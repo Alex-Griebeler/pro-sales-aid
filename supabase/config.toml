@@ -5,3 +5,9 @@ verify_jwt = false
 
 [functions.rate-consultation]
 verify_jwt = false
+
+[functions.parse-questionnaire]
+verify_jwt = false
+
+[functions.get-consultation]
+verify_jwt = false
