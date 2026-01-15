@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_consultations: {
+        Row: {
+          ai_response: string
+          created_at: string
+          detected_format: string | null
+          id: string
+          input_text: string
+          input_type: string
+          quality_rating: number | null
+          rated_at: string | null
+          rating_comment: string | null
+          session_id: string
+          source_filename: string | null
+        }
+        Insert: {
+          ai_response: string
+          created_at?: string
+          detected_format?: string | null
+          id?: string
+          input_text: string
+          input_type: string
+          quality_rating?: number | null
+          rated_at?: string | null
+          rating_comment?: string | null
+          session_id: string
+          source_filename?: string | null
+        }
+        Update: {
+          ai_response?: string
+          created_at?: string
+          detected_format?: string | null
+          id?: string
+          input_text?: string
+          input_type?: string
+          quality_rating?: number | null
+          rated_at?: string | null
+          rating_comment?: string | null
+          session_id?: string
+          source_filename?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           access_expires_at: string | null

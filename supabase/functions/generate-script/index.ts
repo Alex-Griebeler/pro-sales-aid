@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -93,18 +94,60 @@ Quando houver dados:
 - Cada seção em no máximo 3-4 linhas
 - NUNCA invente dados que não foram fornecidos`;
 
+// Helper to collect full response from SSE stream
+async function collectStreamResponse(response: Response): Promise<string> {
+  const reader = response.body?.getReader();
+  if (!reader) throw new Error("No reader available");
+
+  const decoder = new TextDecoder();
+  let textBuffer = "";
+  let fullContent = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    textBuffer += decoder.decode(value, { stream: true });
+
+    let newlineIndex: number;
+    while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+      let line = textBuffer.slice(0, newlineIndex);
+      textBuffer = textBuffer.slice(newlineIndex + 1);
+
+      if (line.endsWith("\r")) line = line.slice(0, -1);
+      if (line.startsWith(":") || line.trim() === "") continue;
+      if (!line.startsWith("data: ")) continue;
+
+      const jsonStr = line.slice(6).trim();
+      if (jsonStr === "[DONE]") break;
+
+      try {
+        const parsed = JSON.parse(jsonStr);
+        const content = parsed.choices?.[0]?.delta?.content;
+        if (content) fullContent += content;
+      } catch {
+        // Incomplete JSON, skip
+      }
+    }
+  }
+
+  return fullContent;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { questionnaireData, freeFormInput, type } = await req.json();
+    const { questionnaireData, freeFormInput, type, sessionId, sourceFilename, detectedFormat } = await req.json();
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
+
+    const inputType = type === "questionnaire" ? "questionnaire" : "scenario";
+    const inputText = type === "questionnaire" ? questionnaireData : freeFormInput;
 
     let userMessage = "";
     
@@ -120,7 +163,7 @@ Gere um script personalizado seguindo a estrutura definida.`;
 Baseado na metodologia E.R.A. e nos princípios do Script de Conversão, qual a melhor estratégia e discurso para este caso?`;
     }
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
@@ -136,28 +179,68 @@ Baseado na metodologia E.R.A. e nos princípios do Script de Conversão, qual a 
       }),
     });
 
-    if (!response.ok) {
-      if (response.status === 429) {
+    if (!aiResponse.ok) {
+      if (aiResponse.status === 429) {
         return new Response(
           JSON.stringify({ error: "Limite de requisições excedido. Tente novamente em alguns minutos." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      if (response.status === 402) {
+      if (aiResponse.status === 402) {
         return new Response(
           JSON.stringify({ error: "Créditos esgotados. Adicione créditos em Settings → Workspace → Usage." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
+      const errorText = await aiResponse.text();
+      console.error("AI gateway error:", aiResponse.status, errorText);
       return new Response(
         JSON.stringify({ error: "Erro ao processar solicitação" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    return new Response(response.body, {
+    // Clone response to both stream to client AND collect for DB
+    const [streamForClient, streamForDB] = aiResponse.body!.tee();
+
+    // Save to database in background (non-blocking)
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+    if (supabaseUrl && supabaseKey && sessionId) {
+      // Process in background without blocking the stream
+      (async () => {
+        try {
+          const fullResponse = await collectStreamResponse(new Response(streamForDB));
+          
+          const supabase = createClient(supabaseUrl, supabaseKey);
+          
+          const { data, error } = await supabase
+            .from("ai_consultations")
+            .insert({
+              session_id: sessionId,
+              input_type: inputType,
+              input_text: inputText,
+              source_filename: sourceFilename || null,
+              detected_format: detectedFormat || null,
+              ai_response: fullResponse,
+            })
+            .select("id")
+            .single();
+
+          if (error) {
+            console.error("Error saving consultation:", error);
+          } else {
+            console.log("Consultation saved:", data.id);
+          }
+        } catch (e) {
+          console.error("Background save error:", e);
+        }
+      })();
+    }
+
+    // Return stream immediately
+    return new Response(streamForClient, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (e) {

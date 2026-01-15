@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Sparkles, Cpu, Loader2, Lightbulb, Upload, FileText, X, ClipboardList, Link2, FileUp } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 import { toast } from 'sonner';
 import AIResponseRenderer from './AIResponseRenderer';
+import RatingComponent from './RatingComponent';
 
 interface AIAssistantPageProps {
   section: EbookSection;
@@ -10,6 +11,19 @@ interface AIAssistantPageProps {
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-script`;
 const PARSE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/parse-questionnaire`;
+
+// Get or create a persistent session ID
+const getSessionId = (): string => {
+  const storageKey = 'ai_consultation_session_id';
+  let sessionId = localStorage.getItem(storageKey);
+  
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem(storageKey, sessionId);
+  }
+  
+  return sessionId;
+};
 
 const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
   const [aiInput, setAiInput] = useState("");
@@ -22,7 +36,13 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
   const [uploadedFileName, setUploadedFileName] = useState("");
   const [googleFormsUrl, setGoogleFormsUrl] = useState("");
   const [showUrlInput, setShowUrlInput] = useState(false);
+  const [consultationId, setConsultationId] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setSessionId(getSessionId());
+  }, []);
 
   const parseSSEStream = async (
     response: Response,
@@ -80,6 +100,7 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
     setLoading(true);
     setError("");
     setAiResponse("");
+    setConsultationId(null);
 
     try {
       const response = await fetch(CHAT_URL, {
@@ -90,8 +111,17 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
         },
         body: JSON.stringify(
           mode === 'questionnaire'
-            ? { questionnaireData: questionnaireText, type: "questionnaire" }
-            : { freeFormInput: aiInput, type: "scenario" }
+            ? { 
+                questionnaireData: questionnaireText, 
+                type: "questionnaire",
+                sessionId,
+                sourceFilename: uploadedFileName || null,
+              }
+            : { 
+                freeFormInput: aiInput, 
+                type: "scenario",
+                sessionId,
+              }
         ),
       });
 
@@ -109,6 +139,8 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
         },
         () => {
           setLoading(false);
+          // After stream completes, fetch the consultation ID
+          fetchLatestConsultationId();
         }
       );
     } catch (e) {
@@ -116,6 +148,29 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
       setError(e instanceof Error ? e.message : "Erro desconhecido");
       setLoading(false);
       toast.error("Erro ao gerar script");
+    }
+  };
+
+  const fetchLatestConsultationId = async () => {
+    try {
+      // Small delay to ensure DB save completes
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      const { data, error } = await supabase
+        .from('ai_consultations')
+        .select('id')
+        .eq('session_id', sessionId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (!error && data) {
+        setConsultationId(data.id);
+      }
+    } catch (e) {
+      console.error('Error fetching consultation ID:', e);
     }
   };
 
@@ -396,6 +451,11 @@ P8 - Dor/Lesão: Dor lombar ocasional`}
             </span>
           </div>
           <AIResponseRenderer response={aiResponse} />
+          
+          {/* Rating Component - appears after response and when not loading */}
+          {!loading && consultationId && (
+            <RatingComponent consultationId={consultationId} />
+          )}
         </div>
       )}
     </div>
