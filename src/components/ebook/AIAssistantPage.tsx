@@ -1,12 +1,14 @@
-import { useState, useRef, useEffect } from 'react';
-import { Sparkles, Cpu, Loader2, Lightbulb, Upload, FileText, X, ClipboardList, Link2, FileUp } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { Sparkles, Cpu, Loader2, Lightbulb, Upload, FileText, X, ClipboardList, Link2, FileUp, RotateCcw, List, ArrowRight } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 import { toast } from 'sonner';
 import AIResponseRenderer from './AIResponseRenderer';
 import RatingComponent from './RatingComponent';
+import { sections } from '@/data/ebookSections';
 
 interface AIAssistantPageProps {
   section: EbookSection;
+  onNavigate?: (page: number) => void;
 }
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-script`;
@@ -71,7 +73,7 @@ const getOrCreateSession = async (): Promise<SessionData | null> => {
   }
 };
 
-const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
+const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
   const [aiInput, setAiInput] = useState("");
   const [questionnaireText, setQuestionnaireText] = useState("");
   const [aiResponse, setAiResponse] = useState("");
@@ -533,6 +535,44 @@ P8 - Dor/Lesão: Dor lombar ocasional`}
           {/* Rating Component - appears after response and when not loading */}
           {!loading && consultationId && sessionData && (
             <RatingComponent consultationId={consultationId} sessionToken={sessionData.sessionToken} />
+          )}
+
+          {/* Next Steps CTAs - appears after response is complete */}
+          {!loading && onNavigate && (
+            <div className="pt-6 space-y-3 border-t border-border mt-6">
+              <span className="text-caption text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                <ArrowRight className="w-3.5 h-3.5" strokeWidth={1.5} />
+                Próximos Passos
+              </span>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => {
+                    setAiResponse("");
+                    setAiInput("");
+                    setQuestionnaireText("");
+                    setConsultationId(null);
+                    setUploadedFileName("");
+                  }}
+                  className="flex items-center gap-2 px-4 py-2.5 text-sm bg-muted/50 rounded-full hover:bg-muted transition-all text-foreground"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" strokeWidth={1.5} />
+                  Nova Consulta
+                </button>
+                <button
+                  onClick={() => onNavigate(sections.findIndex(s => s.id === 'sumario'))}
+                  className="flex items-center gap-2 px-4 py-2.5 text-sm bg-muted/50 rounded-full hover:bg-muted transition-all text-foreground"
+                >
+                  <List className="w-3.5 h-3.5" strokeWidth={1.5} />
+                  Ver Sumário
+                </button>
+                <button
+                  onClick={() => onNavigate(0)}
+                  className="flex items-center gap-2 px-4 py-2.5 text-sm bg-muted/50 rounded-full hover:bg-muted transition-all text-muted-foreground hover:text-foreground"
+                >
+                  Voltar ao Início
+                </button>
+              </div>
+            </div>
           )}
         </div>
       )}

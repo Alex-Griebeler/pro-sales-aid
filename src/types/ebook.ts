@@ -54,9 +54,15 @@ export interface ParqQuestion {
   guidance: string;
 }
 
+export interface TransitionOption {
+  label: string;
+  action: 'next' | 'start' | 'ai' | 'toc';
+}
+
 export interface EbookSection {
   id: string;
-  type?: 'hero' | 'triangle_concept' | 'ai_tool' | 'intro_concept' | 'toc' | 'checklist';
+  type?: 'hero' | 'triangle_concept' | 'ai_tool' | 'intro_concept' | 'toc' | 'checklist' | 'transition';
+  transitionOptions?: TransitionOption[];
   title: string;
   subtitle?: string;
   tag?: string;
