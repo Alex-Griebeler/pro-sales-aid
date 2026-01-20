@@ -29,10 +29,10 @@ export const sections: EbookSection[] = [
       { id: 'p6', title: 'P6 — Maior Dificuldade', pageNumber: 14 },
       { id: 'p7', title: 'P7 — Expectativa do Final', pageNumber: 15 },
       { id: 'p8', title: 'P8 — Dor ou Lesão', pageNumber: 16 },
-      { id: 'checklist-pre', title: 'Checklist Pré-Treino', pageNumber: 17 },
-      { id: 'parq', title: 'PAR-Q', pageNumber: 18 },
-      { id: 'checklist-pos', title: 'Checklist Pós-Treino', pageNumber: 19 },
-      { id: 'final', title: 'A Regra Final', pageNumber: 20 }
+      { id: 'parq', title: 'PAR-Q', pageNumber: 17 },
+      { id: 'final', title: 'A Regra Final', pageNumber: 18 },
+      { id: 'checklist-pre', title: 'Checklist Pré-Treino', pageNumber: 19 },
+      { id: 'checklist-pos', title: 'Checklist Pós-Treino', pageNumber: 20 }
     ]
   },
   {
@@ -456,25 +456,6 @@ export const sections: EbookSection[] = [
     principle: "Quem resolve dor no experimental quase nunca perde o fechamento."
   },
   {
-    id: 'checklist-pre',
-    type: 'checklist',
-    title: "Checklist Pré-Treino",
-    subtitle: "Antes de Iniciar a Sessão",
-    content: "Verifique todos os itens antes de começar o treino experimental. Um profissional preparado transmite segurança e competência.",
-    checklistItems: [
-      { text: "Questionário P1-P8 preenchido e analisado", category: "Preparação" },
-      { text: "Espaço de treino organizado e equipamentos separados", category: "Preparação" },
-      { text: "PAR-Q aplicado e assinado", category: "Segurança" },
-      { text: "Plano B de exercícios preparado (caso identifique limitações)", category: "Segurança" },
-      { text: "Portfólio de serviços memorizado", category: "Comercial" },
-      { text: "Condições especiais definidas (se aplicável)", category: "Comercial" },
-      { text: "Horários disponíveis mapeados", category: "Comercial" },
-      { text: "Roupa adequada e apresentação profissional", category: "Imagem" },
-      { text: "Pontualidade (chegar 10min antes)", category: "Imagem" }
-    ],
-    principle: "O treino experimental começa antes do aluno chegar."
-  },
-  {
     id: 'parq',
     title: "PAR-Q",
     subtitle: "Questionário de Prontidão",
@@ -498,6 +479,38 @@ export const sections: EbookSection[] = [
     highlight: "O PAR-Q não é ferramenta de venda. Ele é ferramenta de proteção."
   },
   {
+    id: 'final',
+    title: "A Regra Final",
+    subtitle: "O Princípio Fundamental",
+    content: "Este documento deve ser usado antes, durante e após o treino experimental. Ele não é um script decorado — é um sistema de pensamento.",
+    list: [
+      "O questionário orienta a condução técnica",
+      "O treino experimental gera percepção de valor real",
+      "O fechamento encaixa a melhor oferta do portfólio"
+    ],
+    quote: "A venda acontece quando o aluno percebe que você é a solução certa para o problema dele. Seu trabalho é criar essa percepção com verdade e competência.",
+    highlight: "O aluno não compra porque respondeu um formulário. Ele compra porque viveu a experiência certa."
+  },
+  {
+    id: 'checklist-pre',
+    type: 'checklist',
+    title: "Checklist Pré-Treino",
+    subtitle: "Antes de Iniciar a Sessão",
+    content: "Verifique todos os itens antes de começar o treino experimental. Um profissional preparado transmite segurança e competência.",
+    checklistItems: [
+      { text: "Questionário P1-P8 preenchido e analisado", category: "Preparação" },
+      { text: "Espaço de treino organizado e equipamentos separados", category: "Preparação" },
+      { text: "PAR-Q aplicado e assinado", category: "Segurança" },
+      { text: "Plano B de exercícios preparado (caso identifique limitações)", category: "Segurança" },
+      { text: "Portfólio de serviços memorizado", category: "Comercial" },
+      { text: "Condições especiais definidas (se aplicável)", category: "Comercial" },
+      { text: "Horários disponíveis mapeados", category: "Comercial" },
+      { text: "Roupa adequada e apresentação profissional", category: "Imagem" },
+      { text: "Pontualidade (chegar 10min antes)", category: "Imagem" }
+    ],
+    principle: "O treino experimental começa antes do aluno chegar."
+  },
+  {
     id: 'checklist-pos',
     type: 'checklist',
     title: "Checklist Pós-Treino",
@@ -515,18 +528,5 @@ export const sections: EbookSection[] = [
       { text: "Registrar observações no CRM/planilha para futuro", category: "Registro" }
     ],
     principle: "O follow-up transforma \"vou pensar\" em \"fechado\"."
-  },
-  {
-    id: 'final',
-    title: "A Regra Final",
-    subtitle: "O Princípio Fundamental",
-    content: "Este documento deve ser usado antes, durante e após o treino experimental. Ele não é um script decorado — é um sistema de pensamento.",
-    list: [
-      "O questionário orienta a condução técnica",
-      "O treino experimental gera percepção de valor real",
-      "O fechamento encaixa a melhor oferta do portfólio"
-    ],
-    quote: "A venda acontece quando o aluno percebe que você é a solução certa para o problema dele. Seu trabalho é criar essa percepção com verdade e competência.",
-    highlight: "O aluno não compra porque respondeu um formulário. Ele compra porque viveu a experiência certa."
   }
 ];
