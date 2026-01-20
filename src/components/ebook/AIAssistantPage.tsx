@@ -23,6 +23,15 @@ interface SessionData {
 // Get or create a persistent session using server-side validation
 const getOrCreateSession = async (): Promise<SessionData | null> => {
   const storageKey = 'ai_consultation_session';
+  // Clear old sessions from before migration (version key check)
+  const versionKey = 'ai_session_version';
+  const currentVersion = '2'; // Increment this when session schema changes
+  
+  if (localStorage.getItem(versionKey) !== currentVersion) {
+    localStorage.removeItem(storageKey);
+    localStorage.setItem(versionKey, currentVersion);
+  }
+  
   const storedSession = localStorage.getItem(storageKey);
   
   // Check if we have a valid stored session
