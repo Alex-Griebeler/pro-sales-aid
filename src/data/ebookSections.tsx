@@ -75,7 +75,7 @@ export const sections: EbookSection[] = [
     split: [
       { 
         title: "Presenciais", 
-        items: ["Individual 60min (Premium)", "Treino em Dupla (30 min)", "Treino em Dupla (60 min)", "Pequenos Grupos (até 4 alunos)"] 
+        items: ["Individual 60min (Premium)", "Individual 30min (Entrada / Horário Ocioso)", "Treino em Dupla (30 min)", "Treino em Dupla (60 min)", "Pequenos Grupos (até 4 alunos)"] 
       }
     ],
     objectives: [
