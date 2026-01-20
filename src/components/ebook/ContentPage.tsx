@@ -7,24 +7,24 @@ interface ContentPageProps {
 
 const ContentPage = ({ section }: ContentPageProps) => {
   return (
-    <div className="space-y-8 overflow-y-auto max-h-[580px] pr-4 scrollbar-thin animate-fade-in">
+    <div className="space-y-6 sm:space-y-8 overflow-y-auto max-h-[calc(100dvh-180px)] sm:max-h-[580px] pr-2 sm:pr-4 scrollbar-thin animate-fade-in">
       <header className="space-y-2">
-        <h2 className="text-headline text-foreground">{section.title}</h2>
+        <h2 className="text-xl sm:text-headline text-foreground">{section.title}</h2>
         {section.subtitle && (
-          <p className="text-accent font-medium text-sm uppercase tracking-wider">{section.subtitle}</p>
+          <p className="text-accent font-medium text-xs sm:text-sm uppercase tracking-wider">{section.subtitle}</p>
         )}
       </header>
 
       {/* Question */}
       {section.question && (
-        <div className="p-5 bg-accent/5 rounded-2xl border border-accent/10">
-          <div className="flex gap-4 items-start">
-            <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
-              <MessageCircle className="w-4 h-4 text-accent" strokeWidth={1.5} />
+        <div className="p-4 sm:p-5 bg-accent/5 rounded-xl sm:rounded-2xl border border-accent/10">
+          <div className="flex gap-3 sm:gap-4 items-start">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+              <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" strokeWidth={1.5} />
             </div>
             <div className="space-y-1">
-              <span className="text-caption text-accent uppercase tracking-wider">Pergunta ao Aluno</span>
-              <p className="font-medium text-foreground">{section.question}</p>
+              <span className="text-[10px] sm:text-caption text-accent uppercase tracking-wider">Pergunta ao Aluno</span>
+              <p className="font-medium text-sm sm:text-base text-foreground">{section.question}</p>
             </div>
           </div>
         </div>
@@ -157,27 +157,29 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Offers Table */}
         {section.offers && (
-          <div className="overflow-hidden rounded-2xl border border-border">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50">
-                <tr>
-                  <th className="px-5 py-4 text-left text-caption text-muted-foreground uppercase tracking-wider">
-                    Situação do Aluno
-                  </th>
-                  <th className="px-5 py-4 text-left text-caption text-muted-foreground uppercase tracking-wider">
-                    Encaixe Estratégico
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {section.offers.map((o, i) => (
-                  <tr key={i} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-5 py-4 text-foreground">{o.k}</td>
-                    <td className="px-5 py-4 text-accent font-medium">{o.v}</td>
+          <div className="overflow-x-auto -mx-2 px-2">
+            <div className="overflow-hidden rounded-xl sm:rounded-2xl border border-border min-w-[300px]">
+              <table className="w-full text-xs sm:text-sm">
+                <thead className="bg-muted/50">
+                  <tr>
+                    <th className="px-3 sm:px-5 py-3 sm:py-4 text-left text-[10px] sm:text-caption text-muted-foreground uppercase tracking-wider">
+                      Situação do Aluno
+                    </th>
+                    <th className="px-3 sm:px-5 py-3 sm:py-4 text-left text-[10px] sm:text-caption text-muted-foreground uppercase tracking-wider">
+                      Encaixe Estratégico
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {section.offers.map((o, i) => (
+                    <tr key={i} className="hover:bg-muted/30 transition-colors">
+                      <td className="px-3 sm:px-5 py-3 sm:py-4 text-foreground">{o.k}</td>
+                      <td className="px-3 sm:px-5 py-3 sm:py-4 text-accent font-medium">{o.v}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
@@ -195,15 +197,15 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Split Sections */}
         {section.split && (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
             {section.split.map((s, i) => (
-              <div key={i} className="space-y-3">
-                <h4 className="text-caption text-accent uppercase tracking-wider">
+              <div key={i} className="space-y-2 sm:space-y-3">
+                <h4 className="text-[10px] sm:text-caption text-accent uppercase tracking-wider">
                   {s.title}
                 </h4>
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   {s.items.map((item, idx) => (
-                    <div key={idx} className="p-3 bg-muted/30 rounded-xl text-sm text-foreground">
+                    <div key={idx} className="p-2.5 sm:p-3 bg-muted/30 rounded-lg sm:rounded-xl text-xs sm:text-sm text-foreground">
                       {item}
                     </div>
                   ))}
@@ -225,8 +227,8 @@ const ContentPage = ({ section }: ContentPageProps) => {
 
         {/* Principle */}
         {section.principle && (
-          <div className="p-8 bg-accent/5 rounded-2xl border border-accent/10 text-center">
-            <p className="text-lg font-medium italic text-foreground">
+          <div className="p-5 sm:p-8 bg-accent/5 rounded-xl sm:rounded-2xl border border-accent/10 text-center">
+            <p className="text-base sm:text-lg font-medium italic text-foreground">
               "{section.principle}"
             </p>
           </div>

@@ -55,15 +55,15 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-12 selection:bg-accent selection:text-accent-foreground">
+    <div className="min-h-screen min-h-[100dvh] bg-background flex flex-col items-center justify-center p-2 sm:p-4 md:p-12 selection:bg-accent selection:text-accent-foreground">
       {/* Container Principal */}
-      <div className="max-w-4xl w-full bg-card min-h-[750px] flex flex-col relative border border-border rounded-lg overflow-hidden shadow-2xl">
+      <div className="max-w-4xl w-full bg-card min-h-[calc(100dvh-1rem)] sm:min-h-[750px] flex flex-col relative border border-border rounded-lg overflow-hidden shadow-2xl">
         
         {/* Barra de Progresso */}
         <ProgressBar currentPage={currentPage} totalPages={sections.length} />
 
         {/* Área de Conteúdo Dinâmico */}
-        <main className="flex-1 flex flex-col p-8 md:p-14 justify-center" key={active.id}>
+        <main className="flex-1 flex flex-col p-4 sm:p-8 md:p-14 justify-center overflow-hidden" key={active.id}>
           {renderContent()}
         </main>
 

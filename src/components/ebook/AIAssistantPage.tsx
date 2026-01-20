@@ -347,36 +347,36 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
   };
 
   return (
-    <div className="space-y-6 animate-fade-in overflow-y-auto max-h-[580px] pr-4 scrollbar-thin">
-      <header className="space-y-3">
-        <h2 className="text-headline text-foreground">
+    <div className="space-y-5 sm:space-y-6 animate-fade-in overflow-y-auto max-h-[calc(100dvh-180px)] sm:max-h-[580px] pr-2 sm:pr-4 scrollbar-thin">
+      <header className="space-y-2 sm:space-y-3">
+        <h2 className="text-xl sm:text-headline text-foreground">
           {section.title}
         </h2>
-        <p className="text-body text-muted-foreground max-w-2xl">{section.content}</p>
+        <p className="text-sm sm:text-body text-muted-foreground max-w-2xl">{section.content}</p>
       </header>
 
       {/* Mode Tabs */}
-      <div className="flex gap-1 p-1 bg-muted/50 rounded-full w-fit">
+      <div className="flex gap-0.5 sm:gap-1 p-1 bg-muted/50 rounded-full w-full sm:w-fit">
         <button
           onClick={() => setMode('scenario')}
-          className={`px-5 py-2 text-sm font-medium rounded-full transition-all ${
+          className={`flex-1 sm:flex-none px-3 sm:px-5 py-2.5 sm:py-2 text-xs sm:text-sm font-medium rounded-full transition-all min-h-[44px] sm:min-h-0 ${
             mode === 'scenario'
               ? 'bg-background text-foreground shadow-sm'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
-          <Lightbulb className="w-3.5 h-3.5 inline mr-2" strokeWidth={1.5} />
+          <Lightbulb className="w-3.5 h-3.5 inline mr-1.5 sm:mr-2" strokeWidth={1.5} />
           Cenário
         </button>
         <button
           onClick={() => setMode('questionnaire')}
-          className={`px-5 py-2 text-sm font-medium rounded-full transition-all ${
+          className={`flex-1 sm:flex-none px-3 sm:px-5 py-2.5 sm:py-2 text-xs sm:text-sm font-medium rounded-full transition-all min-h-[44px] sm:min-h-0 ${
             mode === 'questionnaire'
               ? 'bg-background text-foreground shadow-sm'
               : 'text-muted-foreground hover:text-foreground'
           }`}
         >
-          <FileText className="w-3.5 h-3.5 inline mr-2" strokeWidth={1.5} />
+          <FileText className="w-3.5 h-3.5 inline mr-1.5 sm:mr-2" strokeWidth={1.5} />
           Questionário
         </button>
       </div>
@@ -384,16 +384,16 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
       {mode === 'scenario' && (
         <>
           {section.aiExamples && section.aiExamples.length > 0 && (
-            <div className="space-y-3">
-              <span className="text-caption text-muted-foreground uppercase tracking-wider">
+            <div className="space-y-2 sm:space-y-3">
+              <span className="text-[10px] sm:text-caption text-muted-foreground uppercase tracking-wider">
                 Exemplos
               </span>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {section.aiExamples.map((example, i) => (
                   <button
                     key={i}
                     onClick={() => handleExampleClick(example)}
-                    className="px-4 py-2 text-sm bg-muted/50 rounded-full hover:bg-muted transition-all text-foreground/80 hover:text-foreground"
+                    className="px-3 sm:px-4 py-2 text-xs sm:text-sm bg-muted/50 rounded-full hover:bg-muted active:bg-muted/70 transition-all text-foreground/80 hover:text-foreground min-h-[40px]"
                   >
                     {example}
                   </button>
@@ -407,13 +407,13 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
               value={aiInput}
               onChange={(e) => setAiInput(e.target.value)}
               placeholder="Ex: Aluno de 45 anos com dor no ombro diz que está caro. O que dizer?"
-              className="w-full bg-muted/30 border-0 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 h-28 resize-none transition-all text-foreground placeholder:text-muted-foreground"
+              className="w-full bg-muted/30 border-0 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 h-24 sm:h-28 resize-none transition-all text-foreground placeholder:text-muted-foreground"
               maxLength={50000}
             />
             <button
               onClick={handleGenerate}
               disabled={loading || !aiInput.trim()}
-              className="w-full bg-foreground text-background py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-accent hover:text-accent-foreground transition-all disabled:opacity-40 font-medium text-sm"
+              className="w-full bg-foreground text-background py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-accent hover:text-accent-foreground active:scale-[0.98] transition-all disabled:opacity-40 font-medium text-sm min-h-[48px]"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" strokeWidth={1.5} /> : <Sparkles className="w-4 h-4" strokeWidth={1.5} />}
               Gerar Estratégia
@@ -423,23 +423,23 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
       )}
 
       {mode === 'questionnaire' && (
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-caption text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-2 sm:space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <span className="text-[10px] sm:text-caption text-muted-foreground uppercase tracking-wider flex items-center gap-1.5 sm:gap-2">
                 <ClipboardList className="w-3.5 h-3.5" strokeWidth={1.5} />
                 Questionário do Aluno (P1-P8)
               </span>
               {uploadedFileName && (
-                <button onClick={clearQuestionnaire} className="text-sm text-muted-foreground hover:text-destructive flex items-center gap-1">
+                <button onClick={clearQuestionnaire} className="text-xs sm:text-sm text-muted-foreground hover:text-destructive flex items-center gap-1 min-h-[36px]">
                   <X className="w-3.5 h-3.5" strokeWidth={1.5} />
-                  {uploadedFileName}
+                  <span className="truncate max-w-[120px]">{uploadedFileName}</span>
                 </button>
               )}
             </div>
 
             {/* Upload Options */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -451,7 +451,7 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
               />
               <label
                 htmlFor="questionnaire-upload"
-                className={`flex items-center gap-2 px-4 py-2 text-sm bg-muted/50 rounded-full cursor-pointer hover:bg-muted transition-all text-muted-foreground hover:text-foreground ${(parsingPdf || sessionLoading || !sessionData) ? 'opacity-50 cursor-wait' : ''}`}
+                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm bg-muted/50 rounded-full cursor-pointer hover:bg-muted active:bg-muted/70 transition-all text-muted-foreground hover:text-foreground min-h-[40px] ${(parsingPdf || sessionLoading || !sessionData) ? 'opacity-50 cursor-wait' : ''}`}
               >
                 {parsingPdf ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
@@ -463,7 +463,7 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
 
               <button
                 onClick={() => setShowUrlInput(!showUrlInput)}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-muted/50 rounded-full hover:bg-muted transition-all text-muted-foreground hover:text-foreground"
+                className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm bg-muted/50 rounded-full hover:bg-muted active:bg-muted/70 transition-all text-muted-foreground hover:text-foreground min-h-[40px]"
               >
                 <Link2 className="w-3.5 h-3.5" strokeWidth={1.5} />
                 Google Forms
@@ -472,17 +472,17 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
 
             {/* Google Forms URL Input */}
             {showUrlInput && (
-              <div className="flex gap-2 animate-fade-in">
+              <div className="flex flex-col sm:flex-row gap-2 animate-fade-in">
                 <input
                   type="url"
                   value={googleFormsUrl}
                   onChange={(e) => setGoogleFormsUrl(e.target.value)}
                   placeholder="Cole o link do Google Forms..."
-                  className="flex-1 bg-muted/30 border-0 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all text-foreground placeholder:text-muted-foreground"
+                  className="flex-1 bg-muted/30 border-0 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 transition-all text-foreground placeholder:text-muted-foreground min-h-[44px]"
                 />
                 <button
                   onClick={handleGoogleFormsUrl}
-                  className="px-4 py-2 text-sm bg-accent text-accent-foreground rounded-full hover:bg-accent/80 transition-all font-medium"
+                  className="px-4 py-2.5 text-sm bg-accent text-accent-foreground rounded-full hover:bg-accent/80 active:scale-[0.98] transition-all font-medium min-h-[44px]"
                 >
                   Importar
                 </button>
@@ -492,18 +492,8 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
             <textarea
               value={questionnaireText}
               onChange={(e) => setQuestionnaireText(e.target.value)}
-              placeholder={`Cole aqui as respostas do questionário do aluno. Exemplo:
-
-P1 - Perfil de busca: Já treinei com personal, mas busco algo mais organizado
-P2.1 - Condição física (1-5): 3
-P2.2 - Autopercepção estética (1-5): 2
-P3 - Objetivo: Emagrecer e ganhar definição
-P4 - Período: Manhã (7h-9h)
-P5 - Frequência: 4x por semana
-P6 - Dificuldade: Falta de regularidade
-P7 - Expectativa: Ter um corpo definido em 6 meses
-P8 - Dor/Lesão: Dor lombar ocasional`}
-              className="w-full bg-muted/30 border-0 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 h-44 resize-none transition-all text-foreground placeholder:text-muted-foreground"
+              placeholder={`Cole aqui as respostas do questionário do aluno...`}
+              className="w-full bg-muted/30 border-0 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 h-36 sm:h-44 resize-none transition-all text-foreground placeholder:text-muted-foreground"
               disabled={parsingPdf}
               maxLength={50000}
             />
@@ -512,7 +502,7 @@ P8 - Dor/Lesão: Dor lombar ocasional`}
           <button
             onClick={handleGenerate}
             disabled={loading || !questionnaireText.trim() || parsingPdf}
-            className="w-full bg-accent text-accent-foreground py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-foreground hover:text-background transition-all disabled:opacity-40 font-medium text-sm"
+            className="w-full bg-accent text-accent-foreground py-3.5 rounded-full flex items-center justify-center gap-2 hover:bg-foreground hover:text-background active:scale-[0.98] transition-all disabled:opacity-40 font-medium text-sm min-h-[48px]"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" strokeWidth={1.5} /> : <FileText className="w-4 h-4" strokeWidth={1.5} />}
             Gerar Script Completo
