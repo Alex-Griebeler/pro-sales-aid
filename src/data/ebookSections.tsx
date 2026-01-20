@@ -75,11 +75,11 @@ export const sections: EbookSection[] = [
     split: [
       { 
         title: "Presenciais", 
-        items: ["Individual 60min (Premium)", "Individual 30min (Time Efficient)", "Treino em Dupla (30/60 min)", "Pequenos Grupos (até 4 alunos)"] 
+        items: ["Individual 60min (Premium)", "Treino em Dupla (30/60 min)", "Pequenos Grupos (até 4 alunos)"] 
       },
       { 
         title: "Planejamento / Híbrido", 
-        items: ["Planejamento sem acompanhamento", "Planejamento + Sessões pontuais", "Modelo Híbrido (Semanal/Quinzenal)"] 
+        items: ["Planejamento + Sessões Pontuais", "Modelo Híbrido (Semanal/Quinzenal)"] 
       }
     ],
     objectives: [
