@@ -6,12 +6,14 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Validate session ID format (UUID v4)
-const isValidSessionId = (sessionId: string): boolean => {
-  if (!sessionId || typeof sessionId !== 'string') return false;
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(sessionId);
-};
+// Hash a string using SHA-256
+async function hashToken(token: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(token);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 // Validate UUID format
 const isValidUUID = (uuid: string): boolean => {
@@ -36,10 +38,10 @@ serve(async (req) => {
   }
 
   try {
-    const { consultation_id, rating, comment, sessionId } = await req.json();
+    const { consultation_id, rating, comment, sessionToken } = await req.json();
 
-    // Validate session ID
-    if (!isValidSessionId(sessionId)) {
+    // Validate session token format
+    if (!sessionToken || !isValidUUID(sessionToken)) {
       return new Response(
         JSON.stringify({ error: "Sessão inválida" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -72,10 +74,33 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Validate session token server-side
+    const sessionHash = await hashToken(sessionToken);
+
+    const { data: sessionData, error: sessionError } = await supabase
+      .from('sessions')
+      .select('id, expires_at')
+      .eq('session_hash', sessionHash)
+      .single();
+
+    if (sessionError || !sessionData) {
+      return new Response(
+        JSON.stringify({ error: "Sessão não encontrada" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (new Date(sessionData.expires_at) < new Date()) {
+      return new Response(
+        JSON.stringify({ error: "Sessão expirada" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     // Verify ownership: Check that the consultation belongs to this session
     const { data: consultation, error: fetchError } = await supabase
       .from("ai_consultations")
-      .select("session_id")
+      .select("session_uuid")
       .eq("id", consultation_id)
       .single();
 
@@ -86,9 +111,9 @@ serve(async (req) => {
       );
     }
 
-    // Verify the consultation belongs to this session
-    if (consultation.session_id !== sessionId) {
-      console.warn("Session mismatch:", { expected: consultation.session_id, received: sessionId });
+    // Verify the consultation belongs to this session (using session_uuid)
+    if (consultation.session_uuid !== sessionData.id) {
+      console.warn("Session mismatch:", { expected: consultation.session_uuid, received: sessionData.id });
       return new Response(
         JSON.stringify({ error: "Não autorizado a avaliar esta consulta" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
