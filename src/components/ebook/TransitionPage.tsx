@@ -1,5 +1,6 @@
 import { CheckCircle, ArrowRight, RotateCcw, List, Sparkles } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
+import { sections } from '@/data/ebookSections';
 
 interface TransitionPageProps {
   section: EbookSection;
@@ -9,10 +10,14 @@ interface TransitionPageProps {
 }
 
 const TransitionPage = ({ section, onNavigate, aiPageIndex, tocPageIndex }: TransitionPageProps) => {
+  // Find the next page after transition (should be P1)
+  const currentIndex = sections.findIndex(s => s.id === 'transition');
+  const nextPageIndex = currentIndex + 1;
+
   const handleAction = (action: string) => {
     switch (action) {
       case 'next':
-        // Will be handled by parent navigation
+        onNavigate(nextPageIndex);
         break;
       case 'start':
         onNavigate(0);
