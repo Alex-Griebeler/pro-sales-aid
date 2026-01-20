@@ -231,6 +231,12 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Check session before processing
+    if (!sessionData?.sessionToken) {
+      toast.error("Sessão não inicializada. Aguarde ou recarregue a página.");
+      return;
+    }
+
     setUploadedFileName(file.name);
 
     // Handle text files directly
@@ -256,7 +262,7 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
       try {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("sessionToken", sessionData?.sessionToken || "");
+        formData.append("sessionToken", sessionData.sessionToken);
 
         const response = await fetch(PARSE_URL, {
           method: "POST",
@@ -430,11 +436,11 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
                 onChange={handleFileUpload}
                 className="hidden"
                 id="questionnaire-upload"
-                disabled={parsingPdf}
+                disabled={parsingPdf || sessionLoading || !sessionData}
               />
               <label
                 htmlFor="questionnaire-upload"
-                className={`flex items-center gap-2 px-4 py-2 text-sm bg-muted/50 rounded-full cursor-pointer hover:bg-muted transition-all text-muted-foreground hover:text-foreground ${parsingPdf ? 'opacity-50 cursor-wait' : ''}`}
+                className={`flex items-center gap-2 px-4 py-2 text-sm bg-muted/50 rounded-full cursor-pointer hover:bg-muted transition-all text-muted-foreground hover:text-foreground ${(parsingPdf || sessionLoading || !sessionData) ? 'opacity-50 cursor-wait' : ''}`}
               >
                 {parsingPdf ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
