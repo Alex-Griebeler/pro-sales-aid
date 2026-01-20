@@ -18,21 +18,21 @@ export const sections: EbookSection[] = [
     tocItems: [
       { id: 'intro-conversao', title: 'O Conceito E.R.A.', pageNumber: 3 },
       { id: 'base-conversao', title: 'O Triângulo da Conversão', pageNumber: 4 },
-      { id: 'ia_assistant', title: 'Consultoria IA', pageNumber: 5 },
-      { id: 'portfolio', title: 'Portfólio Recomendado', pageNumber: 6 },
-      { id: 'p1', title: 'P1 — Perfil de Busca', pageNumber: 7 },
-      { id: 'p2a', title: 'P2.1 — Condição Física', pageNumber: 8 },
-      { id: 'p2b', title: 'P2.2 — Autopercepção', pageNumber: 9 },
-      { id: 'p3', title: 'P3 — Objetivo e Áreas', pageNumber: 10 },
-      { id: 'p4', title: 'P4 — Período do Dia', pageNumber: 11 },
-      { id: 'p5', title: 'P5 — Frequência Semanal', pageNumber: 12 },
-      { id: 'p6', title: 'P6 — Maior Dificuldade', pageNumber: 13 },
-      { id: 'p7', title: 'P7 — Expectativa do Final', pageNumber: 14 },
-      { id: 'p8', title: 'P8 — Dor ou Lesão', pageNumber: 15 },
-      { id: 'checklist-pre', title: 'Checklist Pré-Treino', pageNumber: 16 },
-      { id: 'parq', title: 'PAR-Q', pageNumber: 17 },
-      { id: 'checklist-pos', title: 'Checklist Pós-Treino', pageNumber: 18 },
-      { id: 'final', title: 'A Regra Final', pageNumber: 19 }
+      { id: 'portfolio', title: 'Portfólio Recomendado', pageNumber: 5 },
+      { id: 'ia_assistant', title: 'Consultoria IA', pageNumber: 6 },
+      { id: 'p1', title: 'P1 — Perfil de Busca', pageNumber: 8 },
+      { id: 'p2a', title: 'P2.1 — Condição Física', pageNumber: 9 },
+      { id: 'p2b', title: 'P2.2 — Autopercepção', pageNumber: 10 },
+      { id: 'p3', title: 'P3 — Objetivo e Áreas', pageNumber: 11 },
+      { id: 'p4', title: 'P4 — Período do Dia', pageNumber: 12 },
+      { id: 'p5', title: 'P5 — Frequência Semanal', pageNumber: 13 },
+      { id: 'p6', title: 'P6 — Maior Dificuldade', pageNumber: 14 },
+      { id: 'p7', title: 'P7 — Expectativa do Final', pageNumber: 15 },
+      { id: 'p8', title: 'P8 — Dor ou Lesão', pageNumber: 16 },
+      { id: 'checklist-pre', title: 'Checklist Pré-Treino', pageNumber: 17 },
+      { id: 'parq', title: 'PAR-Q', pageNumber: 18 },
+      { id: 'checklist-pos', title: 'Checklist Pós-Treino', pageNumber: 19 },
+      { id: 'final', title: 'A Regra Final', pageNumber: 20 }
     ]
   },
   {
@@ -68,20 +68,6 @@ export const sections: EbookSection[] = [
     auxiliaryText: "A EXPECTATIVA do aluno é agachar pesado e sair do treino \"arrebentado\" todos os dias, mas a REALIDADE é que ele não tem as competências físicas para isso: faltam mobilidade, estabilidade e técnica. A AUTORIDADE está em mostrar que quem treina pesado todos os dias não treina pesado nunca, e que aprimorar essas competências melhora a performance e reduz o risco de lesões."
   },
   {
-    id: 'ia_assistant',
-    title: "Consultoria IA ✨",
-    subtitle: "Estratégia Personalizada",
-    content: "Use a inteligência artificial para adaptar os princípios do script ao seu caso real de hoje.",
-    type: 'ai_tool',
-    aiExamples: [
-      "Aluno diz que está caro. O que responder?",
-      "Aluno com dor no joelho quer treinar pesado",
-      "Aluno quer treinar 5x por semana mas nunca foi regular",
-      "Aluno frustrado com resultados de outro personal",
-      "Aluno sedentário há 2 anos quer emagrecer rápido"
-    ]
-  },
-  {
     id: 'portfolio',
     title: "Portfólio Recomendado",
     subtitle: "Diversifique para Converter",
@@ -103,6 +89,33 @@ export const sections: EbookSection[] = [
       "Criar escada de valor (upgrade natural)"
     ],
     principle: "Não atender quem quer comprar não é falta de horário — é falta de estratégia."
+  },
+  {
+    id: 'ia_assistant',
+    title: "Consultoria IA ✨",
+    subtitle: "Estratégia Personalizada",
+    content: "Use a inteligência artificial para adaptar os princípios do script ao seu caso real de hoje.",
+    type: 'ai_tool',
+    aiExamples: [
+      "Aluno diz que está caro. O que responder?",
+      "Aluno com dor no joelho quer treinar pesado",
+      "Aluno quer treinar 5x por semana mas nunca foi regular",
+      "Aluno frustrado com resultados de outro personal",
+      "Aluno sedentário há 2 anos quer emagrecer rápido"
+    ]
+  },
+  {
+    id: 'transition',
+    type: 'transition',
+    title: "Estratégia Pronta! ✅",
+    subtitle: "Próximos Passos",
+    content: "Você já tem uma estratégia personalizada para seu caso. Quer dominar a teoria por trás de cada pergunta para aplicar em qualquer situação?",
+    transitionOptions: [
+      { label: "Continuar para a Teoria (P1-P8)", action: "next" },
+      { label: "Nova Consulta", action: "ai" },
+      { label: "Ver Sumário", action: "toc" },
+      { label: "Voltar ao Início", action: "start" }
+    ]
   },
   {
     id: 'p1',

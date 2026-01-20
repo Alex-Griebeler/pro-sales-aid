@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { sections } from '@/data/ebookSections';
 import HeroPage from '@/components/ebook/HeroPage';
 import TrianglePage from '@/components/ebook/TrianglePage';
@@ -7,6 +7,7 @@ import ContentPage from '@/components/ebook/ContentPage';
 import IntroConceptPage from '@/components/ebook/IntroConceptPage';
 import TocPage from '@/components/ebook/TocPage';
 import ChecklistPage from '@/components/ebook/ChecklistPage';
+import TransitionPage from '@/components/ebook/TransitionPage';
 import Navigation from '@/components/ebook/Navigation';
 import ProgressBar from '@/components/ebook/ProgressBar';
 
@@ -19,6 +20,12 @@ const Index = () => {
 
   const active = sections[currentPage];
 
+  // Find key page indexes for TransitionPage navigation
+  const pageIndexes = useMemo(() => ({
+    ai: sections.findIndex(s => s.id === 'ia_assistant'),
+    toc: sections.findIndex(s => s.id === 'sumario'),
+  }), []);
+
   const renderContent = () => {
     switch (active.type) {
       case 'hero':
@@ -26,13 +33,22 @@ const Index = () => {
       case 'triangle_concept':
         return <TrianglePage section={active} />;
       case 'ai_tool':
-        return <AIAssistantPage section={active} />;
+        return <AIAssistantPage section={active} onNavigate={goToPage} />;
       case 'intro_concept':
         return <IntroConceptPage section={active} />;
       case 'toc':
         return <TocPage section={active} onNavigate={goToPage} />;
       case 'checklist':
         return <ChecklistPage section={active} />;
+      case 'transition':
+        return (
+          <TransitionPage 
+            section={active} 
+            onNavigate={goToPage}
+            aiPageIndex={pageIndexes.ai}
+            tocPageIndex={pageIndexes.toc}
+          />
+        );
       default:
         return <ContentPage section={active} />;
     }
