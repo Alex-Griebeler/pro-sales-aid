@@ -6,12 +6,55 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Validate session ID format (UUID v4)
-const isValidSessionId = (sessionId: string): boolean => {
-  if (!sessionId || typeof sessionId !== 'string') return false;
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-  return uuidRegex.test(sessionId);
+// Hash a string using SHA-256
+async function hashToken(token: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(token);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Validate UUID format
+const isValidUUID = (uuid: string): boolean => {
+  if (!uuid || typeof uuid !== 'string') return false;
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(uuid);
 };
+
+// Validate session token and return session UUID
+async function validateSessionToken(
+  supabase: any,
+  sessionToken: string
+): Promise<{ valid: boolean; sessionUuid?: string; error?: string }> {
+  if (!sessionToken || !isValidUUID(sessionToken)) {
+    return { valid: false, error: "Token de sessão inválido" };
+  }
+
+  const sessionHash = await hashToken(sessionToken);
+
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('id, expires_at')
+    .eq('session_hash', sessionHash)
+    .single();
+
+  if (error || !data) {
+    return { valid: false, error: "Sessão não encontrada" };
+  }
+
+  if (new Date(data.expires_at) < new Date()) {
+    return { valid: false, error: "Sessão expirada" };
+  }
+
+  // Update last_used_at
+  await supabase
+    .from('sessions')
+    .update({ last_used_at: new Date().toISOString() })
+    .eq('id', data.id);
+
+  return { valid: true, sessionUuid: data.id };
+}
 
 // Validate input text length
 const MAX_INPUT_LENGTH = 50000; // 50KB max
@@ -149,12 +192,23 @@ serve(async (req) => {
   }
 
   try {
-    const { questionnaireData, freeFormInput, type, sessionId, sourceFilename, detectedFormat } = await req.json();
+    const { questionnaireData, freeFormInput, type, sessionToken, sourceFilename, detectedFormat } = await req.json();
     
-    // Validate session ID
-    if (!isValidSessionId(sessionId)) {
+    // Create Supabase client with service role
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Supabase configuration missing");
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Validate session token server-side
+    const sessionValidation = await validateSessionToken(supabase, sessionToken);
+    if (!sessionValidation.valid) {
       return new Response(
-        JSON.stringify({ error: "Sessão inválida. Recarregue a página." }),
+        JSON.stringify({ error: sessionValidation.error || "Sessão inválida. Recarregue a página." }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -236,22 +290,17 @@ Baseado na metodologia E.R.A. e nos princípios do Script de Conversão, qual a 
     // Clone response to both stream to client AND collect for DB
     const [streamForClient, streamForDB] = aiResponse.body!.tee();
 
-    // Save to database in background (non-blocking) using service role
-    const supabaseUrl = Deno.env.get("SUPABASE_URL");
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-
-    if (supabaseUrl && supabaseKey && sessionId) {
-      // Process in background without blocking the stream
+    // Save to database in background (non-blocking) using server-side session UUID
+    if (sessionValidation.sessionUuid) {
       (async () => {
         try {
           const fullResponse = await collectStreamResponse(new Response(streamForDB));
           
-          const supabase = createClient(supabaseUrl, supabaseKey);
-          
           const { data, error } = await supabase
             .from("ai_consultations")
             .insert({
-              session_id: sessionId,
+              session_id: sessionValidation.sessionUuid, // Use validated session UUID
+              session_uuid: sessionValidation.sessionUuid, // Also store in new column
               input_type: inputType,
               input_text: inputText,
               source_filename: sourceFilename || null,

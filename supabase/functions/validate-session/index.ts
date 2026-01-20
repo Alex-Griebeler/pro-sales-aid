@@ -30,15 +30,13 @@ serve(async (req) => {
   try {
     const { sessionToken } = await req.json();
 
-    // Validate session token format
     if (!sessionToken || !isValidUUID(sessionToken)) {
       return new Response(
-        JSON.stringify({ error: "Sessão inválida" }),
+        JSON.stringify({ valid: false, error: "Token inválido" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Create Supabase client with service role
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
@@ -48,61 +46,44 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Hash the token and validate session
+    // Hash the token and look it up
     const sessionHash = await hashToken(sessionToken);
 
-    const { data: sessionData, error: sessionError } = await supabase
+    const { data, error } = await supabase
       .from('sessions')
       .select('id, expires_at')
       .eq('session_hash', sessionHash)
       .single();
 
-    if (sessionError || !sessionData) {
+    if (error || !data) {
       return new Response(
-        JSON.stringify({ error: "Sessão não encontrada" }),
+        JSON.stringify({ valid: false, error: "Sessão não encontrada" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    if (new Date(sessionData.expires_at) < new Date()) {
+    // Check expiration
+    if (new Date(data.expires_at) < new Date()) {
       return new Response(
-        JSON.stringify({ error: "Sessão expirada" }),
+        JSON.stringify({ valid: false, error: "Sessão expirada" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Fetch the latest consultation for this session using the session UUID
-    const { data, error } = await supabase
-      .from("ai_consultations")
-      .select("id")
-      .eq("session_uuid", sessionData.id)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .single();
-
-    if (error) {
-      // No consultation found is not an error
-      if (error.code === 'PGRST116') {
-        return new Response(
-          JSON.stringify({ consultation_id: null }),
-          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-      console.error("Database error:", error);
-      return new Response(
-        JSON.stringify({ error: "Erro ao buscar consulta" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    // Update last_used_at
+    await supabase
+      .from('sessions')
+      .update({ last_used_at: new Date().toISOString() })
+      .eq('id', data.id);
 
     return new Response(
-      JSON.stringify({ consultation_id: data?.id || null }),
+      JSON.stringify({ valid: true, sessionId: data.id }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (e) {
-    console.error("get-consultation error:", e);
+    console.error("validate-session error:", e);
     return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Erro desconhecido" }),
+      JSON.stringify({ valid: false, error: e instanceof Error ? e.message : "Erro desconhecido" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }

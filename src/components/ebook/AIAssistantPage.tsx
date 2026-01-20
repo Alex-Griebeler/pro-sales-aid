@@ -12,18 +12,54 @@ interface AIAssistantPageProps {
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-script`;
 const PARSE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/parse-questionnaire`;
 const GET_CONSULTATION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-consultation`;
+const CREATE_SESSION_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-session`;
 
-// Get or create a persistent session ID
-const getSessionId = (): string => {
-  const storageKey = 'ai_consultation_session_id';
-  let sessionId = localStorage.getItem(storageKey);
+interface SessionData {
+  sessionToken: string;
+  sessionId: string;
+  expiresAt: string;
+}
+
+// Get or create a persistent session using server-side validation
+const getOrCreateSession = async (): Promise<SessionData | null> => {
+  const storageKey = 'ai_consultation_session';
+  const storedSession = localStorage.getItem(storageKey);
   
-  if (!sessionId) {
-    sessionId = crypto.randomUUID();
-    localStorage.setItem(storageKey, sessionId);
+  // Check if we have a valid stored session
+  if (storedSession) {
+    try {
+      const parsed = JSON.parse(storedSession) as SessionData;
+      // Check if session is not expired (with 1 hour buffer)
+      if (new Date(parsed.expiresAt) > new Date(Date.now() + 60 * 60 * 1000)) {
+        return parsed;
+      }
+    } catch {
+      // Invalid stored session, will create new one
+    }
   }
   
-  return sessionId;
+  // Create new server-side session
+  try {
+    const response = await fetch(CREATE_SESSION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.error('Failed to create session');
+      return null;
+    }
+
+    const sessionData = await response.json() as SessionData;
+    localStorage.setItem(storageKey, JSON.stringify(sessionData));
+    return sessionData;
+  } catch (e) {
+    console.error('Error creating session:', e);
+    return null;
+  }
 };
 
 const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
@@ -38,11 +74,18 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
   const [googleFormsUrl, setGoogleFormsUrl] = useState("");
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [consultationId, setConsultationId] = useState<string | null>(null);
-  const [sessionId, setSessionId] = useState<string>("");
+  const [sessionData, setSessionData] = useState<SessionData | null>(null);
+  const [sessionLoading, setSessionLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setSessionId(getSessionId());
+    const initSession = async () => {
+      setSessionLoading(true);
+      const session = await getOrCreateSession();
+      setSessionData(session);
+      setSessionLoading(false);
+    };
+    initSession();
   }, []);
 
   const parseSSEStream = async (
@@ -98,6 +141,11 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
       return;
     }
 
+    if (!sessionData) {
+      toast.error("Sessão não inicializada. Tente recarregar a página.");
+      return;
+    }
+
     setLoading(true);
     setError("");
     setAiResponse("");
@@ -115,13 +163,13 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
             ? { 
                 questionnaireData: questionnaireText, 
                 type: "questionnaire",
-                sessionId,
+                sessionToken: sessionData.sessionToken,
                 sourceFilename: uploadedFileName || null,
               }
             : { 
                 freeFormInput: aiInput, 
                 type: "scenario",
-                sessionId,
+                sessionToken: sessionData.sessionToken,
               }
         ),
       });
@@ -153,6 +201,8 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
   };
 
   const fetchLatestConsultationId = async () => {
+    if (!sessionData) return;
+    
     try {
       // Small delay to ensure DB save completes
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -163,7 +213,7 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
-        body: JSON.stringify({ sessionId }),
+        body: JSON.stringify({ sessionToken: sessionData.sessionToken }),
       });
 
       if (response.ok) {
@@ -206,7 +256,7 @@ const AIAssistantPage = ({ section }: AIAssistantPageProps) => {
       try {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("sessionId", sessionId);
+        formData.append("sessionToken", sessionData?.sessionToken || "");
 
         const response = await fetch(PARSE_URL, {
           method: "POST",
@@ -466,8 +516,8 @@ P8 - Dor/Lesão: Dor lombar ocasional`}
           <AIResponseRenderer response={aiResponse} />
           
           {/* Rating Component - appears after response and when not loading */}
-          {!loading && consultationId && (
-            <RatingComponent consultationId={consultationId} />
+          {!loading && consultationId && sessionData && (
+            <RatingComponent consultationId={consultationId} sessionToken={sessionData.sessionToken} />
           )}
         </div>
       )}

@@ -4,11 +4,12 @@ import { toast } from 'sonner';
 
 interface RatingComponentProps {
   consultationId: string;
+  sessionToken: string;
 }
 
 const RATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rate-consultation`;
 
-const RatingComponent = ({ consultationId }: RatingComponentProps) => {
+const RatingComponent = ({ consultationId, sessionToken }: RatingComponentProps) => {
   const [rating, setRating] = useState<number>(0);
   const [hoveredRating, setHoveredRating] = useState<number>(0);
   const [comment, setComment] = useState('');
@@ -34,6 +35,7 @@ const RatingComponent = ({ consultationId }: RatingComponentProps) => {
           consultation_id: consultationId,
           rating,
           comment: comment.trim() || null,
+          sessionToken,
         }),
       });
 

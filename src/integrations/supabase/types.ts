@@ -26,6 +26,7 @@ export type Database = {
           rated_at: string | null
           rating_comment: string | null
           session_id: string
+          session_uuid: string | null
           source_filename: string | null
         }
         Insert: {
@@ -39,6 +40,7 @@ export type Database = {
           rated_at?: string | null
           rating_comment?: string | null
           session_id: string
+          session_uuid?: string | null
           source_filename?: string | null
         }
         Update: {
@@ -52,9 +54,18 @@ export type Database = {
           rated_at?: string | null
           rating_comment?: string | null
           session_id?: string
+          session_uuid?: string | null
           source_filename?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ai_consultations_session_uuid_fkey"
+            columns: ["session_uuid"]
+            isOneToOne: false
+            referencedRelation: "sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -95,12 +106,36 @@ export type Database = {
         }
         Relationships: []
       }
+      sessions: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          last_used_at: string | null
+          session_hash: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          last_used_at?: string | null
+          session_hash: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          last_used_at?: string | null
+          session_hash?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_expired_sessions: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
