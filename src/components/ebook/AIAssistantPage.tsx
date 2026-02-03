@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { Sparkles, Cpu, Loader2, Lightbulb, Upload, FileText, X, ClipboardList, Link2, FileUp, RotateCcw, List, ArrowRight } from 'lucide-react';
+import { Sparkles, Cpu, Loader2, Lightbulb, Upload, FileText, X, ClipboardList, Link2, FileUp, RotateCcw, List, ArrowRight, History } from 'lucide-react';
 import { EbookSection } from '@/types/ebook';
 import { toast } from 'sonner';
 import AIResponseRenderer from './AIResponseRenderer';
 import RatingComponent from './RatingComponent';
+import ConsultationHistoryPage from './ConsultationHistoryPage';
 import { sections } from '@/data/ebookSections';
 
 interface AIAssistantPageProps {
@@ -87,6 +88,7 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
   const [consultationId, setConsultationId] = useState<string | null>(null);
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [sessionLoading, setSessionLoading] = useState(true);
+  const [showHistory, setShowHistory] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -98,6 +100,16 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
     };
     initSession();
   }, []);
+
+  // If showing history, render history page
+  if (showHistory) {
+    return (
+      <ConsultationHistoryPage 
+        section={section} 
+        onBack={() => setShowHistory(false)} 
+      />
+    );
+  }
 
   const parseSSEStream = async (
     response: Response,
@@ -349,10 +361,22 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
   return (
     <div className="space-y-5 sm:space-y-6 animate-fade-in overflow-y-auto max-h-[calc(100dvh-180px)] sm:max-h-[580px] pr-2 sm:pr-4 scrollbar-thin">
       <header className="space-y-2 sm:space-y-3">
-        <h2 className="text-xl sm:text-headline text-foreground">
-          {section.title}
-        </h2>
-        <p className="text-sm sm:text-body text-muted-foreground max-w-2xl">{section.content}</p>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex-1">
+            <h2 className="text-xl sm:text-headline text-foreground">
+              {section.title}
+            </h2>
+            <p className="text-sm sm:text-body text-muted-foreground max-w-2xl mt-1">{section.content}</p>
+          </div>
+          <button
+            onClick={() => setShowHistory(true)}
+            className="shrink-0 p-2.5 rounded-full bg-muted/50 hover:bg-muted transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+            aria-label="Ver histórico de consultas"
+            title="Ver histórico de consultas"
+          >
+            <History className="w-4 h-4 text-muted-foreground" strokeWidth={1.5} />
+          </button>
+        </div>
       </header>
 
       {/* Mode Tabs */}
