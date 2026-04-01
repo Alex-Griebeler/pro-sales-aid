@@ -182,9 +182,8 @@ function readHotmartToken(req: Request, payload: Record<string, unknown>): strin
   return bodyToken?.trim() ?? null;
 }
 
-// deno-lint-ignore no-explicit-any
 async function findAuthUserIdByEmail(
-  supabaseAdmin: any,
+  supabaseAdmin: ReturnType<typeof createClient>,
   email: string,
 ): Promise<string | null> {
   const normalizedEmail = email.toLowerCase();
