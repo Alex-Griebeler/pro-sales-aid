@@ -24,7 +24,7 @@ const isValidUUID = (uuid: string): boolean => {
 
 // Validate session token and return session UUID
 async function validateSessionToken(
-  supabase: any,
+  supabase: ReturnType<typeof createClient>,
   sessionToken: string
 ): Promise<{ valid: boolean; sessionUuid?: string; error?: string }> {
   if (!sessionToken || !isValidUUID(sessionToken)) {
