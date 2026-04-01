@@ -74,8 +74,10 @@ export type Database = {
           email: string
           full_name: string | null
           hotmart_product_id: string | null
+          hotmart_status: string | null
           hotmart_transaction_id: string | null
           id: string
+          last_webhook_payload: Json | null
           purchased_at: string | null
           updated_at: string
           user_id: string
@@ -86,8 +88,10 @@ export type Database = {
           email: string
           full_name?: string | null
           hotmart_product_id?: string | null
+          hotmart_status?: string | null
           hotmart_transaction_id?: string | null
           id?: string
+          last_webhook_payload?: Json | null
           purchased_at?: string | null
           updated_at?: string
           user_id: string
@@ -98,8 +102,10 @@ export type Database = {
           email?: string
           full_name?: string | null
           hotmart_product_id?: string | null
+          hotmart_status?: string | null
           hotmart_transaction_id?: string | null
           id?: string
+          last_webhook_payload?: Json | null
           purchased_at?: string | null
           updated_at?: string
           user_id?: string
