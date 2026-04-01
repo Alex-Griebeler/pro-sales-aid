@@ -75,7 +75,7 @@ function parseIsoDate(input: string | null): string | null {
   return new Date(millis).toISOString();
 }
 
-function sanitizeBaseUrl(value: string | null): string {
+function sanitizeBaseUrl(value: string | undefined | null): string {
   if (!value) return "http://localhost:5173";
   return value.endsWith("/") ? value.slice(0, -1) : value;
 }
@@ -182,8 +182,9 @@ function readHotmartToken(req: Request, payload: Record<string, unknown>): strin
   return bodyToken?.trim() ?? null;
 }
 
+// deno-lint-ignore no-explicit-any
 async function findAuthUserIdByEmail(
-  supabaseAdmin: ReturnType<typeof createClient>,
+  supabaseAdmin: any,
   email: string,
 ): Promise<string | null> {
   const normalizedEmail = email.toLowerCase();
@@ -316,7 +317,7 @@ serve(async (req) => {
       user_id: userId,
       email: parsed.email,
       full_name: parsed.fullName ?? existingProfile?.full_name ?? null,
-      hotmart_status: parsed.normalizedStatus || existingProfile?.hotmart_status ?? null,
+      hotmart_status: (parsed.normalizedStatus || existingProfile?.hotmart_status) ?? null,
       hotmart_transaction_id: parsed.transactionId ?? existingProfile?.hotmart_transaction_id ?? null,
       hotmart_product_id: parsed.productId ?? existingProfile?.hotmart_product_id ?? null,
       purchased_at: parsed.purchasedAt ?? existingProfile?.purchased_at ?? (isPaid ? new Date().toISOString() : null),
