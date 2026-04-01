@@ -317,7 +317,7 @@ serve(async (req) => {
       user_id: userId,
       email: parsed.email,
       full_name: parsed.fullName ?? existingProfile?.full_name ?? null,
-      hotmart_status: parsed.normalizedStatus || existingProfile?.hotmart_status ?? null,
+      hotmart_status: (parsed.normalizedStatus || existingProfile?.hotmart_status) ?? null,
       hotmart_transaction_id: parsed.transactionId ?? existingProfile?.hotmart_transaction_id ?? null,
       hotmart_product_id: parsed.productId ?? existingProfile?.hotmart_product_id ?? null,
       purchased_at: parsed.purchasedAt ?? existingProfile?.purchased_at ?? (isPaid ? new Date().toISOString() : null),
