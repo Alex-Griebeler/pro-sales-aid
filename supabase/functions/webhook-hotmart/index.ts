@@ -75,7 +75,7 @@ function parseIsoDate(input: string | null): string | null {
   return new Date(millis).toISOString();
 }
 
-function sanitizeBaseUrl(value: string | null): string {
+function sanitizeBaseUrl(value: string | undefined | null): string {
   if (!value) return "http://localhost:5173";
   return value.endsWith("/") ? value.slice(0, -1) : value;
 }
