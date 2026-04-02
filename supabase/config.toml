@@ -1,5 +1,8 @@
 project_id = "sfhufzxcpsevqklkruas"
 
+# Mantemos verify_jwt = false em todas as funções para aceitar chamadas públicas e
+# validar autenticação por regras próprias de cada endpoint (ex.: HOTMART_HOTTOK no webhook).
+
 [functions.generate-script]
 verify_jwt = false
 

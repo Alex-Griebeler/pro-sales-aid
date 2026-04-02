@@ -3,12 +3,15 @@ import type { PropsWithChildren } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 
+const ACTIVE_LICENSE_STATUSES = new Set(["active", "approved", "complete"]);
+
 type AuthContextValue = {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  hasActiveLicense: boolean;
+  licenseLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
-  signUp: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 };
 
@@ -18,6 +21,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasActiveLicense, setHasActiveLicense] = useState(false);
+  const [licenseLoading, setLicenseLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
@@ -49,24 +54,64 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     };
   }, []);
 
+  useEffect(() => {
+    let mounted = true;
+
+    const loadLicenseStatus = async () => {
+      if (!user) {
+        if (!mounted) return;
+        setHasActiveLicense(false);
+        setLicenseLoading(false);
+        return;
+      }
+
+      setLicenseLoading(true);
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("hotmart_status")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (!mounted) return;
+
+      if (error) {
+        console.error("Erro ao validar licença no profile:", error.message);
+        setHasActiveLicense(false);
+        setLicenseLoading(false);
+        return;
+      }
+
+      const normalizedStatus = data?.hotmart_status?.toLowerCase() ?? "";
+      const isActive = ACTIVE_LICENSE_STATUSES.has(normalizedStatus);
+
+      setHasActiveLicense(isActive);
+      setLicenseLoading(false);
+    };
+
+    void loadLicenseStatus();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user]);
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
       session,
       loading,
+      hasActiveLicense,
+      licenseLoading,
       signIn: async (email: string, password: string) => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
-        return { error: error?.message ?? null };
-      },
-      signUp: async (email: string, password: string) => {
-        const { error } = await supabase.auth.signUp({ email, password });
         return { error: error?.message ?? null };
       },
       signOut: async () => {
         await supabase.auth.signOut();
       },
     }),
-    [loading, session, user],
+    [hasActiveLicense, licenseLoading, loading, session, user],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

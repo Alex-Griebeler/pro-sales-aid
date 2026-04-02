@@ -11,9 +11,8 @@ type LocationState = {
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signIn, signUp } = useAuth();
+  const { user, signIn } = useAuth();
 
-  const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -30,8 +29,7 @@ const Login = () => {
     event.preventDefault();
     setSubmitting(true);
 
-    const action = isSignUp ? signUp : signIn;
-    const { error } = await action(email.trim(), password);
+    const { error } = await signIn(email.trim(), password);
 
     if (error) {
       toast.error(error);
@@ -39,11 +37,7 @@ const Login = () => {
       return;
     }
 
-    if (isSignUp) {
-      toast.success("Cadastro realizado. Verifique seu email para confirmar a conta.");
-    } else {
-      toast.success("Login realizado com sucesso.");
-    }
+    toast.success("Login realizado com sucesso.");
 
     setSubmitting(false);
   };
@@ -52,13 +46,9 @@ const Login = () => {
     <div className="min-h-screen min-h-[100dvh] bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md bg-card border border-border rounded-xl p-6 sm:p-8 shadow-xl">
         <div className="space-y-2 mb-6">
-          <h1 className="text-2xl sm:text-3xl font-semibold text-foreground">
-            {isSignUp ? "Criar conta" : "Entrar"}
-          </h1>
+          <h1 className="text-2xl sm:text-3xl font-semibold text-foreground">Entrar</h1>
           <p className="text-sm text-muted-foreground">
-            {isSignUp
-              ? "Cadastre-se para acessar a área de membros."
-              : "Faça login para acessar seu conteúdo."}
+            Faça login para acessar sua área de membros.
           </p>
         </div>
 
@@ -92,7 +82,7 @@ const Login = () => {
               onChange={(event) => setPassword(event.target.value)}
               className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               placeholder="Mínimo 6 caracteres"
-              autoComplete={isSignUp ? "new-password" : "current-password"}
+              autoComplete="current-password"
             />
           </div>
 
@@ -102,20 +92,9 @@ const Login = () => {
             className="w-full h-11 rounded-md bg-foreground text-background text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-60 inline-flex items-center justify-center gap-2"
           >
             {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            {isSignUp ? "Criar conta" : "Entrar"}
+            Entrar
           </button>
         </form>
-
-        <div className="mt-5 text-sm text-muted-foreground">
-          {isSignUp ? "Já tem conta?" : "Ainda não tem conta?"}{" "}
-          <button
-            type="button"
-            onClick={() => setIsSignUp((prev) => !prev)}
-            className="text-foreground hover:text-accent underline underline-offset-4 transition-colors"
-          >
-            {isSignUp ? "Entrar" : "Criar conta"}
-          </button>
-        </div>
       </div>
     </div>
   );
