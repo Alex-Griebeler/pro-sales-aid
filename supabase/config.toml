@@ -1,28 +1,30 @@
 project_id = "sfhufzxcpsevqklkruas"
 
 # Segurança: funções da área de membros exigem JWT válido (verify_jwt = true).
-# Exceção: webhook público da Hotmart mantém verify_jwt = false e valida HOTMART_HOTTOK.
+# Como o gateway atual está rejeitando JWT de usuário ES256, mantemos verify_jwt = false
+# e validamos bearer token dentro de cada função com supabase.auth.getUser(accessToken).
+# Exceção mantida: webhook público da Hotmart valida HOTMART_HOTTOK.
 
 [functions.generate-script]
-verify_jwt = true
+verify_jwt = false
 
 [functions.rate-consultation]
-verify_jwt = true
+verify_jwt = false
 
 [functions.parse-questionnaire]
-verify_jwt = true
+verify_jwt = false
 
 [functions.get-consultation]
-verify_jwt = true
+verify_jwt = false
 
 [functions.create-session]
-verify_jwt = true
+verify_jwt = false
 
 [functions.validate-session]
-verify_jwt = true
+verify_jwt = false
 
 [functions.list-consultations]
-verify_jwt = true
+verify_jwt = false
 
 [functions.webhook-hotmart]
 verify_jwt = false
