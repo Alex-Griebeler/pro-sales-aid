@@ -119,6 +119,7 @@ export type Database = {
           id: string
           last_used_at: string | null
           session_hash: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -126,6 +127,7 @@ export type Database = {
           id?: string
           last_used_at?: string | null
           session_hash: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -133,6 +135,7 @@ export type Database = {
           id?: string
           last_used_at?: string | null
           session_hash?: string
+          user_id?: string | null
         }
         Relationships: []
       }
