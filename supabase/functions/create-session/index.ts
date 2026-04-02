@@ -6,6 +6,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const ACTIVE_LICENSE_STATUSES = new Set(["approved", "active", "complete"]);
+
 // Hash a string using SHA-256
 async function hashToken(token: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -20,6 +22,25 @@ function extractBearerToken(req: Request): string | null {
   if (!authHeader?.startsWith("Bearer ")) return null;
   const token = authHeader.slice("Bearer ".length).trim();
   return token || null;
+}
+
+async function hasActiveLicense(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+): Promise<boolean> {
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("hotmart_status")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error fetching profile license:", error);
+    throw new Error("Erro ao validar licença");
+  }
+
+  const status = String(profile?.hotmart_status ?? "").trim().toLowerCase();
+  return ACTIVE_LICENSE_STATUSES.has(status);
 }
 
 serve(async (req) => {
@@ -54,6 +75,13 @@ serve(async (req) => {
     }
 
     const userId = authData.user.id;
+    const activeLicense = await hasActiveLicense(supabase, userId);
+    if (!activeLicense) {
+      return new Response(
+        JSON.stringify({ error: "Acesso bloqueado: licença inativa" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Generate cryptographically secure session token
     const sessionToken = crypto.randomUUID();

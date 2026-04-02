@@ -6,6 +6,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const ACTIVE_LICENSE_STATUSES = new Set(["approved", "active", "complete"]);
+
 // Hash a string using SHA-256
 async function hashToken(token: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -29,9 +31,28 @@ function extractBearerToken(req: Request): string | null {
   return token || null;
 }
 
+async function hasActiveLicense(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+): Promise<boolean> {
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("hotmart_status")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error fetching profile license:", error);
+    throw new Error("Erro ao validar licença");
+  }
+
+  const status = String(profile?.hotmart_status ?? "").trim().toLowerCase();
+  return ACTIVE_LICENSE_STATUSES.has(status);
+}
+
 // Validate session token and return session UUID
 async function validateSessionToken(
-  supabase: any,
+  supabase: ReturnType<typeof createClient>,
   sessionToken: string,
   userId: string,
 ): Promise<{ valid: boolean; sessionUuid?: string; error?: string }> {
@@ -233,13 +254,21 @@ serve(async (req) => {
     }
 
     const userId = authData.user.id;
+    const activeLicense = await hasActiveLicense(supabase, userId);
+    if (!activeLicense) {
+      return new Response(
+        JSON.stringify({ error: "Acesso bloqueado: licença inativa" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Validate session token server-side
     const sessionValidation = await validateSessionToken(supabase, sessionToken, userId);
     if (!sessionValidation.valid) {
+      const statusCode = sessionValidation.error === "Sessão não pertence ao usuário autenticado" ? 403 : 401;
       return new Response(
         JSON.stringify({ error: sessionValidation.error || "Sessão inválida. Recarregue a página." }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        { status: statusCode, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 

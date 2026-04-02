@@ -183,7 +183,7 @@ function readHotmartToken(req: Request, payload: Record<string, unknown>): strin
 }
 
 async function findAuthUserIdByEmail(
-  supabaseAdmin: any,
+  supabaseAdmin: ReturnType<typeof createClient>,
   email: string,
 ): Promise<string | null> {
   const normalizedEmail = email.toLowerCase();
@@ -196,7 +196,9 @@ async function findAuthUserIdByEmail(
     }
 
     const users = data?.users ?? [];
-    const matched = users.find((item: any) => item.email?.toLowerCase() === normalizedEmail);
+    const matched = users.find((item: { id: string; email?: string | null }) =>
+      item.email?.toLowerCase() === normalizedEmail
+    );
     if (matched) {
       return matched.id;
     }
