@@ -32,7 +32,7 @@ function extractBearerToken(req: Request): string | null {
 }
 
 async function hasActiveLicense(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   userId: string,
 ): Promise<boolean> {
   const { data: profile, error } = await supabase
