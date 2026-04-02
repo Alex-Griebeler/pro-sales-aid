@@ -32,7 +32,7 @@ function extractBearerToken(req: Request): string | null {
 }
 
 async function hasActiveLicense(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   userId: string,
 ): Promise<boolean> {
   const { data: profile, error } = await supabase
@@ -52,7 +52,7 @@ async function hasActiveLicense(
 
 // Validate session token and return session UUID
 async function validateSessionToken(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   sessionToken: string,
   userId: string,
 ): Promise<{ valid: boolean; sessionUuid?: string; error?: string }> {
