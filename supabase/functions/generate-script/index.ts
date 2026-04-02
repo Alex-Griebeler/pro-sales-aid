@@ -31,7 +31,7 @@ function extractBearerToken(req: Request): string | null {
 
 // Validate session token and return session UUID
 async function validateSessionToken(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   sessionToken: string,
   userId: string,
 ): Promise<{ valid: boolean; sessionUuid?: string; error?: string }> {
