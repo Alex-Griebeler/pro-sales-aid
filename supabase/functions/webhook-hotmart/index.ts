@@ -196,7 +196,7 @@ async function findAuthUserIdByEmail(
     }
 
     const users = data?.users ?? [];
-    const matched = users.find((item) => item.email?.toLowerCase() === normalizedEmail);
+    const matched = users.find((item: any) => item.email?.toLowerCase() === normalizedEmail);
     if (matched) {
       return matched.id;
     }
