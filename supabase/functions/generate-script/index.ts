@@ -280,8 +280,8 @@ Gere um script personalizado seguindo a estrutura definida.`;
 Baseado na metodologia E.R.A. e nos princípios do Script de Conversão, qual a melhor estratégia e discurso para este caso?`;
     }
 
-    const configuredModel = "google/gemini-2.5-flash";
-    const fallbackModel = "google/gemini-2.5-flash-lite";
+    const configuredModel: string = "google/gemini-2.5-flash";
+    const fallbackModel: string = "google/gemini-2.5-flash-lite";
 
     const callModel = (model: string) => fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
