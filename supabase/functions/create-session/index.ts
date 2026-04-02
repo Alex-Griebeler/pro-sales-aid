@@ -15,6 +15,13 @@ async function hashToken(token: string): Promise<string> {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+function extractBearerToken(req: Request): string | null {
+  const authHeader = req.headers.get("authorization") ?? req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) return null;
+  const token = authHeader.slice("Bearer ".length).trim();
+  return token || null;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -30,6 +37,24 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    const accessToken = extractBearerToken(req);
+    if (!accessToken) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: missing bearer token" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { data: authData, error: authError } = await supabase.auth.getUser(accessToken);
+    if (authError || !authData.user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: invalid user session" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = authData.user.id;
+
     // Generate cryptographically secure session token
     const sessionToken = crypto.randomUUID();
     const sessionHash = await hashToken(sessionToken);
@@ -41,6 +66,7 @@ serve(async (req) => {
     const { data, error } = await supabase
       .from('sessions')
       .insert({
+        user_id: userId,
         session_hash: sessionHash,
         expires_at: expiresAt,
       })

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Star, Loader2, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface RatingComponentProps {
   consultationId: string;
@@ -8,6 +9,14 @@ interface RatingComponentProps {
 }
 
 const RATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/rate-consultation`;
+
+const getAccessToken = async (): Promise<string> => {
+  const { data, error } = await supabase.auth.getSession();
+  if (error || !data.session?.access_token) {
+    throw new Error("Sessão de autenticação inválida. Faça login novamente.");
+  }
+  return data.session.access_token;
+};
 
 const RatingComponent = ({ consultationId, sessionToken }: RatingComponentProps) => {
   const [rating, setRating] = useState<number>(0);
@@ -25,11 +34,13 @@ const RatingComponent = ({ consultationId, sessionToken }: RatingComponentProps)
     setLoading(true);
 
     try {
+      const accessToken = await getAccessToken();
+
       const response = await fetch(RATE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           consultation_id: consultationId,

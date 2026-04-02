@@ -1,25 +1,28 @@
 project_id = "sfhufzxcpsevqklkruas"
 
-# Mantemos verify_jwt = false em todas as funções para aceitar chamadas públicas e
-# validar autenticação por regras próprias de cada endpoint (ex.: HOTMART_HOTTOK no webhook).
+# Segurança: funções da área de membros exigem JWT válido (verify_jwt = true).
+# Exceção: webhook público da Hotmart mantém verify_jwt = false e valida HOTMART_HOTTOK.
 
 [functions.generate-script]
-verify_jwt = false
+verify_jwt = true
 
 [functions.rate-consultation]
-verify_jwt = false
+verify_jwt = true
 
 [functions.parse-questionnaire]
-verify_jwt = false
+verify_jwt = true
 
 [functions.get-consultation]
-verify_jwt = false
+verify_jwt = true
 
 [functions.create-session]
-verify_jwt = false
+verify_jwt = true
 
 [functions.validate-session]
-verify_jwt = false
+verify_jwt = true
+
+[functions.list-consultations]
+verify_jwt = true
 
 [functions.webhook-hotmart]
 verify_jwt = false

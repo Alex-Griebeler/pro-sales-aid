@@ -6,6 +6,7 @@ import AIResponseRenderer from './AIResponseRenderer';
 import RatingComponent from './RatingComponent';
 import ConsultationHistoryPage from './ConsultationHistoryPage';
 import { sections } from '@/data/ebookSections';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AIAssistantPageProps {
   section: EbookSection;
@@ -22,6 +23,14 @@ interface SessionData {
   sessionId: string;
   expiresAt: string;
 }
+
+const getAccessToken = async (): Promise<string> => {
+  const { data, error } = await supabase.auth.getSession();
+  if (error || !data.session?.access_token) {
+    throw new Error("Sessão de autenticação inválida. Faça login novamente.");
+  }
+  return data.session.access_token;
+};
 
 // Get or create a persistent session using server-side validation
 const getOrCreateSession = async (): Promise<SessionData | null> => {
@@ -52,11 +61,13 @@ const getOrCreateSession = async (): Promise<SessionData | null> => {
   
   // Create new server-side session
   try {
+    const accessToken = await getAccessToken();
+
     const response = await fetch(CREATE_SESSION_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
@@ -175,11 +186,13 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
     setConsultationId(null);
 
     try {
+      const accessToken = await getAccessToken();
+
       const response = await fetch(CHAT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(
           mode === 'questionnaire'
@@ -227,6 +240,8 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
     if (!sessionData) return;
     
     try {
+      const accessToken = await getAccessToken();
+
       // Small delay to ensure DB save completes
       await new Promise(resolve => setTimeout(resolve, 1000));
       
@@ -234,7 +249,7 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ sessionToken: sessionData.sessionToken }),
       });
@@ -283,6 +298,8 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
       toast.info("Processando PDF com IA...");
 
       try {
+        const accessToken = await getAccessToken();
+
         const formData = new FormData();
         formData.append("file", file);
         formData.append("sessionToken", sessionData.sessionToken);
@@ -290,7 +307,7 @@ const AIAssistantPage = ({ section, onNavigate }: AIAssistantPageProps) => {
         const response = await fetch(PARSE_URL, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: formData,
         });

@@ -22,6 +22,13 @@ const isValidUUID = (uuid: string): boolean => {
   return uuidRegex.test(uuid);
 };
 
+function extractBearerToken(req: Request): string | null {
+  const authHeader = req.headers.get("authorization") ?? req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) return null;
+  const token = authHeader.slice("Bearer ".length).trim();
+  return token || null;
+}
+
 // Sanitize comment - remove potential harmful content
 const sanitizeComment = (comment: string | undefined): string | null => {
   if (!comment || typeof comment !== 'string') return null;
@@ -74,12 +81,30 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    const accessToken = extractBearerToken(req);
+    if (!accessToken) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: missing bearer token" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { data: authData, error: authError } = await supabase.auth.getUser(accessToken);
+    if (authError || !authData.user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: invalid user session" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = authData.user.id;
+
     // Validate session token server-side
     const sessionHash = await hashToken(sessionToken);
 
     const { data: sessionData, error: sessionError } = await supabase
       .from('sessions')
-      .select('id, expires_at')
+      .select('id, user_id, expires_at')
       .eq('session_hash', sessionHash)
       .single();
 
@@ -94,6 +119,13 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: "Sessão expirada" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    if (sessionData.user_id !== userId) {
+      return new Response(
+        JSON.stringify({ error: "Sessão não pertence ao usuário autenticado" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 

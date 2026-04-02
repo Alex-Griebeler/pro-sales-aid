@@ -4,6 +4,7 @@ import { EbookSection } from '@/types/ebook';
 import AIResponseRenderer from './AIResponseRenderer';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ConsultationHistoryPageProps {
   section: EbookSection;
@@ -27,6 +28,14 @@ interface SessionData {
   expiresAt: string;
 }
 
+const getAccessToken = async (): Promise<string> => {
+  const { data, error } = await supabase.auth.getSession();
+  if (error || !data.session?.access_token) {
+    throw new Error("Sessão de autenticação inválida. Faça login novamente.");
+  }
+  return data.session.access_token;
+};
+
 const LIST_CONSULTATIONS_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/list-consultations`;
 
 const ConsultationHistoryPage = ({ section, onBack }: ConsultationHistoryPageProps) => {
@@ -40,6 +49,7 @@ const ConsultationHistoryPage = ({ section, onBack }: ConsultationHistoryPagePro
     setError(null);
 
     try {
+      const accessToken = await getAccessToken();
       const storageKey = 'ai_consultation_session';
       const storedSession = localStorage.getItem(storageKey);
       
@@ -55,7 +65,7 @@ const ConsultationHistoryPage = ({ section, onBack }: ConsultationHistoryPagePro
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ sessionToken: sessionData.sessionToken }),
       });

@@ -22,10 +22,18 @@ const isValidUUID = (uuid: string): boolean => {
   return uuidRegex.test(uuid);
 };
 
+function extractBearerToken(req: Request): string | null {
+  const authHeader = req.headers.get("authorization") ?? req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) return null;
+  const token = authHeader.slice("Bearer ".length).trim();
+  return token || null;
+}
+
 // Validate session token and return session UUID
 async function validateSessionToken(
   supabase: ReturnType<typeof createClient>,
-  sessionToken: string
+  sessionToken: string,
+  userId: string,
 ): Promise<{ valid: boolean; sessionUuid?: string; error?: string }> {
   if (!sessionToken || !isValidUUID(sessionToken)) {
     return { valid: false, error: "Token de sessão inválido" };
@@ -35,7 +43,7 @@ async function validateSessionToken(
 
   const { data, error } = await supabase
     .from('sessions')
-    .select('id, expires_at')
+    .select('id, user_id, expires_at')
     .eq('session_hash', sessionHash)
     .single();
 
@@ -45,6 +53,10 @@ async function validateSessionToken(
 
   if (new Date(data.expires_at) < new Date()) {
     return { valid: false, error: "Sessão expirada" };
+  }
+
+  if (data.user_id !== userId) {
+    return { valid: false, error: "Sessão não pertence ao usuário autenticado" };
   }
 
   // Update last_used_at
@@ -204,8 +216,26 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    const accessToken = extractBearerToken(req);
+    if (!accessToken) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: missing bearer token" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { data: authData, error: authError } = await supabase.auth.getUser(accessToken);
+    if (authError || !authData.user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized: invalid user session" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = authData.user.id;
+
     // Validate session token server-side
-    const sessionValidation = await validateSessionToken(supabase, sessionToken);
+    const sessionValidation = await validateSessionToken(supabase, sessionToken, userId);
     if (!sessionValidation.valid) {
       return new Response(
         JSON.stringify({ error: sessionValidation.error || "Sessão inválida. Recarregue a página." }),
@@ -250,14 +280,17 @@ Gere um script personalizado seguindo a estrutura definida.`;
 Baseado na metodologia E.R.A. e nos princípios do Script de Conversão, qual a melhor estratégia e discurso para este caso?`;
     }
 
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const configuredModel = Deno.env.get("LOVABLE_AI_MODEL")?.trim() || "google/gemini-3-flash";
+    const fallbackModel = "google/gemini-2.5-flash";
+
+    const callModel = (model: string) => fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model,
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userMessage },
@@ -265,6 +298,17 @@ Baseado na metodologia E.R.A. e nos princípios do Script de Conversão, qual a 
         stream: true,
       }),
     });
+
+    let aiResponse = await callModel(configuredModel);
+
+    if (!aiResponse.ok && configuredModel !== fallbackModel && (aiResponse.status === 400 || aiResponse.status === 404)) {
+      const fallbackAttempt = await callModel(fallbackModel);
+      if (fallbackAttempt.ok) {
+        aiResponse = fallbackAttempt;
+      } else {
+        aiResponse = fallbackAttempt;
+      }
+    }
 
     if (!aiResponse.ok) {
       if (aiResponse.status === 429) {
